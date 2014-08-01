@@ -1,0 +1,11 @@
+#clock {
+	color: white;
+	font-family: sans-serif;
+	/*
+	background-color: rgba(61, 56, 56, 0.92);
+	border: 1px solid rgba(255, 255, 255, 0.92);
+	*/
+	float: right;
+	margin: 2px;
+	padding: 4px;
+}
