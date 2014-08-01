@@ -10,6 +10,7 @@ body {
 	/*
 	background-color: rgb(100, 130, 170);
 	*/
+	background-color: #373B3F;	
 	background-color: rgb(139, 154, 173);
 	font-family: sans-serif;
 	overflow: hidden;
@@ -23,7 +24,11 @@ body {
 	position: fixed;
 	margin: 0;
 	padding: 0;
-	background-color: #373B3F;	
+	background-color: #373B3F;
+	/*
+	background-color: white;
+	background-color: rgb(240, 242, 250);
+	*/
 }
 
 #overlay div {

@@ -22,7 +22,6 @@
 
 	loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function(scriptURL) {
 
-
 		var loadFeature = function(context, featureName, callback, parentPath, id) {
 			context[featureName] = {
 				children : {}
@@ -193,9 +192,11 @@
 
 				var timeout3 = function() {
 					console.log("OK !!!");
-					$("#overlay").fadeOut(633, function() {
-						$("#overlay").remove();
-					});
+					setTimeout(function() {
+						$("#overlay").fadeOut(375, function() {
+							$("#overlay").remove();
+						});
+					}, 375);
 				};
 
 				loadChildrenWorker(context.root.children, 0);
