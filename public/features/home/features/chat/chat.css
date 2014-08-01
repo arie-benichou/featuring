@@ -1,6 +1,14 @@
 #chat {
-	background-color: blue;
+	background-color: black;
 	width: 50%;
-	height: 100%;
+	height: 90%;
 	float: left;
+	text-align: center;
 }
+
+/*
+#chat div:first-child {
+	margin: 10px;
+	color: white;
+}
+*/

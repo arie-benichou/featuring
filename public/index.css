@@ -1,14 +1,29 @@
 body {
-	margin: 0;
+	margin: 0 auto;
 	padding: 0;
-	background-color: grey;
+	/*
+	background-color: rgb(100, 130, 170);
+	*/
+	/*
+	background-color: #373B3F;
+	*/
+	/*
+	background-color: rgb(100, 130, 170);
+	*/
+	background-color: rgb(139, 154, 173);
+	font-family: sans-serif;
+	overflow: hidden;
 }
 
 #overlay {
-	width: 100%;
+	top: 0;
+	left: 0;
+	width : 100%;
 	height: 100%;
 	position: fixed;
-	background-color: rgb(100, 130, 170);
+	margin: 0;
+	padding: 0;
+	background-color: #373B3F;	
 }
 
 #overlay div {
@@ -33,10 +48,10 @@ a:visited {
 
 a:active {
 	text-decoration: underline;
-	color: white;	
+	color: white;
 }
 
 a:hover {
 	text-decoration: underline;
-	color: white;	
+	color: white;
 }

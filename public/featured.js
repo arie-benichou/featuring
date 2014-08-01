@@ -21,7 +21,8 @@
 	};
 
 	loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function(scriptURL) {
-		
+
+
 		var loadFeature = function(context, featureName, callback, parentPath, id) {
 			context[featureName] = {
 				children : {}
@@ -52,7 +53,7 @@
 
 		var onFeatureLoaded = function(context, featureName, data, path, id) {
 			clearTimeout(id);
-			var id = setTimeout(timeout1, 250);
+			var id = setTimeout(timeout1, 225);
 			Object.keys(data).map(function(subFeatureName) {
 				loadFeature(context.children, subFeatureName, onFeatureLoaded, path, id);
 			});
@@ -93,16 +94,15 @@
 					console.log("loading style: " + url);
 				});
 				/*
-				$.get(prefix + ".css", function(data) {
-					ctx.styles = data;
-				});
-				*/
+				 * $.get(prefix + ".css", function(data) { ctx.styles = data;
+				 * });
+				 */
 			};
 
 			var loadFeature = function(prefix, featureName, ctx, id) {
 				loadFeatureHtml(prefix, ctx);
 				loadFeatureStyle(prefix, ctx);
-				//loadFeatureScript(prefix, featureName, ctx);
+				// loadFeatureScript(prefix, featureName, ctx);
 				if (Object.keys(ctx.children).length) {
 					loadChildrenFeature(ctx.children, id);
 				}
@@ -110,7 +110,7 @@
 
 			var loadChildrenFeature = function(ctx, id) {
 				clearTimeout(id);
-				var id = setTimeout(timeout2, 500);
+				var id = setTimeout(timeout2, 225);
 				for (child in ctx) {
 					var prefix = ctx[child].path + child;
 					loadFeature(prefix, child, ctx[child], id);
@@ -149,9 +149,8 @@
 
 				console.log(html);
 				$("body").find("feature").replaceWith(html);
-				//$("body").append(html);
-				
-				
+				// $("body").append(html);
+
 				// TODO load after html ?
 				// TODO might need to be ordered
 				var loadFeatureScript = function(prefix, featureName, ctx) {
@@ -165,20 +164,17 @@
 						worker.addEventListener('message', function(e) {
 							protocol.handle(e)
 						}, false);
-//						worker.postMessage({
-//							'type' : 'test',
-//						});					
+						// worker.postMessage({
+						// 'type' : 'test',
+						// });
 					});
 					/*
-					loadScript(prefix + ".js", function(url) {
-						console.log("loading script: " + url);
-					});
-					$.get(prefix + ".js", function(data) {
-						ctx.script = data;
-					});
-					*/
+					 * loadScript(prefix + ".js", function(url) {
+					 * console.log("loading script: " + url); }); $.get(prefix +
+					 * ".js", function(data) { ctx.script = data; });
+					 */
 				};
-				
+
 				var loadWorker = function(prefix, featureName, ctx, id) {
 					loadFeatureScript(prefix, featureName, ctx);
 					if (Object.keys(ctx.children).length) {
@@ -188,21 +184,21 @@
 
 				var loadChildrenWorker = function(ctx, id) {
 					clearTimeout(id);
-					var id = setTimeout(timeout3, 500);
+					var id = setTimeout(timeout3, 225);
 					for (child in ctx) {
 						var prefix = ctx[child].path + child;
 						loadWorker(prefix, child, ctx[child], id);
 					}
 				};
-				
-				
+
 				var timeout3 = function() {
 					console.log("OK !!!");
-					$("#overlay").fadeOut(633, function(){$("#overlay").remove();});
+					$("#overlay").fadeOut(633, function() {
+						$("#overlay").remove();
+					});
 				};
-				
+
 				loadChildrenWorker(context.root.children, 0);
-				
 
 			};
 

@@ -1,21 +1,19 @@
 #home {
-	width: 100%;
-	height: 75%;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
+	width: 1140px;
+	height: 714px;
+	background-color: rgb(100, 130, 170);
+	border: 2px solid white;
+	border-radius: 6px;
+	margin: 0 auto;
+	margin-top: 2.5%;
 }
 
 #header {
+	height: 5%;
 }
 
 #footer {
-	width: 100%;
-	color: white;
+	height: 5%;
 	text-align: center;
-	color: white;
-	font-family: sans-serif;
-	float: right;
-	margin: 2px;
-	margin-top: 16px;
-	padding: 4px;
+	margin: 9px;
 }
