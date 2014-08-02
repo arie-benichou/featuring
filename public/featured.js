@@ -1,6 +1,6 @@
 (function() {
 
-	console.log("starting application...");
+	console.info("Loading features metadata...");
 
 	var origin = window.location.origin + "/";
 
@@ -29,26 +29,23 @@
 			var path = parentPath + "features/" + featureName + "/";
 			var url = path + featureName + ".json";
 			context[featureName].path = path;
-
-			console.log("loading : " + url);
-			$.get(url, function(data) {
+			// TODO ? distinction beetween service and application fragment
+			context[featureName].flattened = false;
+			console.info("loading : " + url);
+			console.debug(context);
+			$.getJSON(url).done(function(data) {
+				console.debug(data);
 				if (Object.keys(data).length) {
-					console.log("feature '" + featureName + "' has children");
+					console.info("feature '" + featureName + "' has children");
 					callback(context[featureName], featureName, data, path, id);
 				} else {
-					console.log("feature '" + featureName + "' has no children");
+					console.info("feature '" + featureName + "' has no children");
 				}
-				console.log(context);
+			}).fail(function() {
+				clearTimeout(id);
+				console.error("Error while loading/parsing : " + url);
 			});
 		};
-
-		var context = {
-			root : {
-				children : {}
-			}
-		};
-		var featureName = "home";
-		var parentPath = origin;
 
 		var onFeatureLoaded = function(context, featureName, data, path, id) {
 			clearTimeout(id);
@@ -58,15 +55,15 @@
 			});
 		};
 
-		loadFeature(context.root.children, featureName, onFeatureLoaded, parentPath, 0);
-
 		var timeout1 = function() {
 
-			console.log("It's over !");
+			console.info("Features metadata loaded !");
 
 			var loadFeatureHtml = function(prefix, ctx) {
-				$.get(prefix + ".html", function(data) {
+				$.get(prefix + ".html").done(function(data) {
 					ctx.html = data;
+				}).fail(function() {
+					console.error("Error while loading : " + prefix + ".html");
 				});
 			};
 
@@ -90,18 +87,13 @@
 			// TODO might need to be ordered
 			var loadFeatureStyle = function(prefix, ctx) {
 				loadStyle(prefix + ".css", function(url) {
-					console.log("loading style: " + url);
+					console.info("loading style: " + url);
 				});
-				/*
-				 * $.get(prefix + ".css", function(data) { ctx.styles = data;
-				 * });
-				 */
 			};
 
 			var loadFeature = function(prefix, featureName, ctx, id) {
 				loadFeatureHtml(prefix, ctx);
 				loadFeatureStyle(prefix, ctx);
-				// loadFeatureScript(prefix, featureName, ctx);
 				if (Object.keys(ctx.children).length) {
 					loadChildrenFeature(ctx.children, id);
 				}
@@ -118,19 +110,25 @@
 
 			var timeout2 = function() {
 
-				console.log("html loaded !");
+				console.info("HTML & CSS loaded !");
 				console.debug(context.root.children);
 
 				var flatten = function(ctx, html) {
 					var childContext = [];
 					html.find("feature").each(function(k, v) {
 						var feature = $(v).attr("id");
-						var featureHtml = ctx.children[feature].html;
 						var node = html.find("#" + feature);
-						$(node).replaceWith(featureHtml);
-						var hasChild = Object.keys(ctx.children[feature].children).length > 0;
-						if (hasChild && childContext.length == 0) {
-							childContext.push(ctx.children[feature]);
+						if (feature in ctx.children) {
+							var featureHtml = ctx.children[feature].html;
+							ctx.children[feature].flattened = true;
+							$(node).replaceWith(featureHtml);
+							var hasChild = Object.keys(ctx.children[feature].children).length > 0;
+							if (hasChild && childContext.length == 0) {
+								childContext.push(ctx.children[feature]);
+							}
+						} else {
+							console.warn("Removed undeclared feature : " + feature);
+							$(node).remove();
 						}
 					});
 					return {
@@ -144,34 +142,49 @@
 					return flattenRecursive(flatten(pass.childContext[0], $(pass.html)));
 				};
 
+				console.info("Flattening HTML...");
+
 				var html = flattenRecursive(flatten(context.root.children.home, $(context.root.children.home.html)));
 
-				console.log(html);
-				$("body").find("feature").replaceWith(html);
-				// $("body").append(html);
+				var check = function(name, ctx, unflattened) {
+					if (!ctx.flattened) {
+						unflattened.push(name);
+					}
+					checkRecursive(ctx.children, unflattened);
+				};
+				var checkRecursive = function(ctx, unflattened) {
+					console.debug(ctx);
+					var keys = Object.keys(ctx);
+					if (keys.length > 0) {
+						for ( var child in ctx) {
+							console.debug(child);
+							check(child, ctx[child], unflattened);
+						}
+					}
+					return unflattened;
+				};
+				var unusedFragment = checkRecursive(context.root.children.home.children, []);
+				unusedFragment.map(function(e) {
+					console.warn("Feature '" + e + "' has been declared but not used in HTML : is it a service ?");
+				});
 
-				// TODO load after html ?
+				console.info("HTML flattened !");
+				console.debug(html);
+
+				$("body").find("feature").replaceWith(html);
 				// TODO might need to be ordered
 				var loadFeatureScript = function(prefix, featureName, ctx) {
 					// TODO ? shared worker
 					loadScript(prefix + ".protocol.js", function(url) {
-						console.log("loading script: " + url);
-						console.log(window[featureName]);
+						console.info("loading script: " + url);
+						console.debug(window[featureName]);
 						var protocol = new window[featureName]["protocol"]();
-						console.log(protocol);
+						console.debug(protocol);
 						var worker = new Worker(prefix + ".js");
 						worker.addEventListener('message', function(e) {
 							protocol.handle(e)
 						}, false);
-						// worker.postMessage({
-						// 'type' : 'test',
-						// });
 					});
-					/*
-					 * loadScript(prefix + ".js", function(url) {
-					 * console.log("loading script: " + url); }); $.get(prefix +
-					 * ".js", function(data) { ctx.script = data; });
-					 */
 				};
 
 				var loadWorker = function(prefix, featureName, ctx, id) {
@@ -190,22 +203,35 @@
 					}
 				};
 
-				var timeout3 = function() {
-					console.log("OK !!!");
+				var timeout3 = function(callback) {
+					console.info("JS loaded !");
 					setTimeout(function() {
+						console.info("Application is ready !");
 						$("#overlay").fadeOut(375, function() {
 							$("#overlay").remove();
 						});
 					}, 375);
 				};
 
+				console.info("Loading JS...");
 				loadChildrenWorker(context.root.children, 0);
 
 			};
 
+			console.info("Loading HTML & CSS...");
 			loadChildrenFeature(context.root.children, 0);
 
 		};
+
+		var context = {
+			root : {
+				children : {}
+			}
+		};
+		var featureName = "home";
+		var parentPath = origin;
+
+		loadFeature(context.root.children, featureName, onFeatureLoaded, parentPath, 0);
 
 	});
 

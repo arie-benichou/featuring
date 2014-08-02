@@ -1,5 +1,5 @@
 {
-	"clock"		: true,
-	"search" 	: true,
-	"chat" 		: true
+	"search" 	: "true",
+	"chat" 		: "true",
+	"clock"		: "true"
 }
