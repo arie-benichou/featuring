@@ -21,6 +21,7 @@ body {
 	background-color: rgb(221, 228, 237);
 	background-color: rgb(194, 212, 235);
 	z-index: 9999999999999999;
+	cursor: none;
 }
 
 #overlay div {

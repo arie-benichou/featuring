@@ -8,6 +8,8 @@
 	overflow-x: hidden;
 	background-color: rgb(100, 130, 170);
 	
+	cursor: auto;
+	
 	/* just here for sandbox decoration *
 	margin: 0 auto;
 	border: 3px solid rgba(255, 255, 255, 0.55);

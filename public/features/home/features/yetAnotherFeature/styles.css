@@ -3,13 +3,32 @@
 	height: 100%;
 	float: left;
 	background-color: rgba(0, 72, 126, 0.45);
-	overflow: auto;
-	overflow-x: hidden;	
+	overflow: hidden;
+	overflow-x: hidden;
 }
 
-#yetAnotherFeature p {
-	margin: 26px;
+#yetAnotherFeature div.self {
+	margin: 24px;
+	/*
+	border: 1px solid red;
+	*/
+}
+
+#gmap {
+	width: 306px;
+	float: left;
+	margin: 2px;
+	margin-right: 24px;
+}
+
+#yetAnotherFeature div.text {
+}
+
+#yetAnotherFeature div.text p {
+	margin-top: 12px;
+	margin-bottom: 12px;
 	text-align: left;
-	font-size: 100%;
+	font-size: 125%;
 	color: white;
+	text-align: left;
 }

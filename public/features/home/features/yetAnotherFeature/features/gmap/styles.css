@@ -1,0 +1,18 @@
+#gmap {
+	/*
+	margin-left: 10px;
+	margin-right: 10px;
+	*/
+}
+
+#gmap iframe {
+	width: 300px;
+	height: 300px;
+}
+
+#gmap div.gmap {
+	width: 300px;
+	height: 300px;
+	border: 3px solid white;
+	border-radius: 7px;
+}
