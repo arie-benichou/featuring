@@ -5,7 +5,7 @@ search.protocol.prototype = {
 	handle : function(e) {
 		console.log("search protocol handling : " + e.data.type);
 		if(e.data.type == "changeBackgroungColor") {
-			$("#search").css("background-color", e.data.data);
+			//$("#search").css("background-color", e.data.data);
 		}
 	}
 };

@@ -1,13 +1,26 @@
 #search {
-	background-color: white;
-	width: 50%;
-	height: 90%;
+	/*
+	background-color: yellow;
+	*/
+	width: 77%;
+	height: 100%;
 	float: left;
-	text-align: center;
+	background-color: rgba(0, 72, 126, 0.45);
+	overflow: scroll;
+	overflow-x: hidden;
+	overflow: auto;
 }
 
+/*
 #search img {
 	width: 149px;
 	height: 140px;
 	margin-top: 45%;
+}
+*/
+p {
+	margin: 26px;
+	text-align: left;
+	font-size: 90%;
+	color: white;
 }

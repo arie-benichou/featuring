@@ -8,6 +8,7 @@ self.postMessage({
 
 var i = 0;
 
+/*
 setInterval(function() {
 
 	var color = (i % 2 == 0) ? "white" : "black";
@@ -19,3 +20,4 @@ setInterval(function() {
 	});
 
 }, 1000 * 2);
+*/

@@ -5,7 +5,7 @@ chat.protocol.prototype = {
 	handle : function(e) {
 		console.log("chat protocol handling : " + e.data.type);
 		if(e.data.type == "changeBackgroungColor") {
-			$("#chat").css("background-color", e.data.data);
+			//$("#chat").css("background-color", e.data.data);
 		}
 	}
 };

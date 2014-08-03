@@ -1,13 +1,19 @@
 #chat {
-	background-color: black;
-	width: 50%;
-	height: 90%;
+	/*
+	background-color: green;
+	*/
+	width: 23%;
+	height: 100%;
 	float: left;
-	text-align: center;
+	/*
+	background-color: rgba(0, 72, 126, 0.35);
+	*/
 }
 
+/*
 #chat img {
 	width: 149px;
 	height: 140px;
 	margin-top: 45%;
 }
+*/

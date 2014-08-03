@@ -203,7 +203,7 @@
 					}
 				};
 
-				var timeout3 = function(callback) {
+				var timeout3 = function() {
 					console.info("JS loaded !");
 					setTimeout(function() {
 						console.info("Application is ready !");
@@ -215,6 +215,7 @@
 
 				console.info("Loading JS...");
 				loadChildrenWorker(context.root.children, 0);
+				//timeout3();
 
 			};
 
