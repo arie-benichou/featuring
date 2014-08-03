@@ -1,19 +1,35 @@
 #chat {
-	/*
-	background-color: green;
-	*/
-	width: 23%;
+	width: 20%;
 	height: 100%;
-	float: left;
 	/*
-	background-color: rgba(0, 72, 126, 0.35);
+	background-color: rgba(0, 72, 126, 0.65);
 	*/
+	background-color: rgba(0, 150, 255, 0.35);
+	overflow-x: hidden;
+	overflow: auto;
 }
 
-/*
-#chat img {
-	width: 149px;
-	height: 140px;
-	margin-top: 45%;
+div.contact {
+	margin: 0;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	border-bottom: 1px solid white;
+	height: 55px;
+	clear: both;
+	overflow: hidden;
 }
-*/
+
+div.contact img {
+	float: left;
+	margin-left: 6px;
+	margin-top: 1px;
+	margin-right: 5px;
+	width: 55px;
+	height: 55px;
+}
+
+div.name {
+	line-height: 55px;
+	font-size: 70%;
+	color: white;
+}

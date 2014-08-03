@@ -2,11 +2,10 @@
 	/*
 	background-color: yellow;
 	*/
-	width: 77%;
+	width: 80%;
 	height: 100%;
 	float: left;
 	background-color: rgba(0, 72, 126, 0.45);
-	overflow: scroll;
 	overflow-x: hidden;
 	overflow: auto;
 }
@@ -21,6 +20,6 @@
 p {
 	margin: 26px;
 	text-align: left;
-	font-size: 90%;
+	font-size: 80%;
 	color: white;
 }
