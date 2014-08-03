@@ -26,8 +26,10 @@
 			context[featureName] = {
 				children : {}
 			};
-			var path = parentPath + "features/" + featureName + "/";
-			var url = path + featureName + ".json";
+			var path = parentPath + "features/" + featureName + "/"; // TODO
+			// extract
+			// constant
+			var url = path + "features.json"; // TODO extract constant
 			context[featureName].path = path;
 			// TODO ? distinction beetween service and application fragment
 			context[featureName].flattened = false;
@@ -60,7 +62,9 @@
 			console.info("Features metadata loaded !");
 
 			var loadFeatureHtml = function(prefix, ctx) {
-				$.get(prefix + ".html").done(function(data) {
+				$.get(prefix + "fragment.html").done(function(data) { // TODO
+					// extract
+					// constant
 					ctx.html = data;
 				}).fail(function() {
 					console.error("Error while loading : " + prefix + ".html");
@@ -86,7 +90,9 @@
 
 			// TODO might need to be ordered
 			var loadFeatureStyle = function(prefix, ctx) {
-				loadStyle(prefix + ".css", function(url) {
+				loadStyle(prefix + "styles.css", function(url) { // TODO
+					// extract
+					// constant
 					console.info("loading style: " + url);
 				});
 			};
@@ -103,7 +109,7 @@
 				clearTimeout(id);
 				var id = setTimeout(timeout2, 225);
 				for (child in ctx) {
-					var prefix = ctx[child].path + child;
+					var prefix = ctx[child].path;
 					loadFeature(prefix, child, ctx[child], id);
 				}
 			};
@@ -171,16 +177,27 @@
 				console.info("HTML flattened !");
 				console.debug(html);
 
-				$("body").find("feature").replaceWith(html);
+				var $html = $(html);
+				var images = $html.find("img");
+				images.bind("error", function() {
+					$(this).attr("alt", this.src);
+					// TODO extract constant					
+					$(this).attr("src", "/i404.png");
+				});
+
+				$("body").find("feature").replaceWith($html);
+				
 				// TODO might need to be ordered
 				var loadFeatureScript = function(prefix, featureName, ctx) {
 					// TODO ? shared worker
-					loadScript(prefix + ".protocol.js", function(url) {
+					// TODO extract constant
+					loadScript(prefix + "protocol.js", function(url) {
 						console.info("loading script: " + url);
 						console.debug(window[featureName]);
 						var protocol = new window[featureName]["protocol"]();
 						console.debug(protocol);
-						var worker = new Worker(prefix + ".js");
+						// TODO extract constant
+						var worker = new Worker(prefix + "main.js");
 						worker.addEventListener('message', function(e) {
 							protocol.handle(e)
 						}, false);
@@ -198,7 +215,7 @@
 					clearTimeout(id);
 					var id = setTimeout(timeout3, 225);
 					for (child in ctx) {
-						var prefix = ctx[child].path + child;
+						var prefix = ctx[child].path;
 						loadWorker(prefix, child, ctx[child], id);
 					}
 				};
@@ -215,7 +232,7 @@
 
 				console.info("Loading JS...");
 				loadChildrenWorker(context.root.children, 0);
-				//timeout3();
+				// timeout3();
 
 			};
 

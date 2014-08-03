@@ -1,23 +1,13 @@
-#search {
-	/*
-	background-color: yellow;
-	*/
+#yetAnotherFeature {
 	width: 80%;
 	height: 100%;
 	float: left;
 	background-color: rgba(0, 72, 126, 0.45);
-	overflow-x: hidden;
 	overflow: auto;
+	overflow-x: hidden;	
 }
 
-/*
-#search img {
-	width: 149px;
-	height: 140px;
-	margin-top: 45%;
-}
-*/
-p {
+#yetAnotherFeature p {
 	margin: 26px;
 	text-align: left;
 	font-size: 80%;
