@@ -1,55 +1,57 @@
+.middle {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
 #home {
-	height: 100%;
-	min-height: 100%;
-	overflow: hidden;
-	background-color: rgb(100, 130, 170);	
+	overflow-x: hidden;
+	background-color: rgb(100, 130, 170);
+	
+	/* just here for sandbox decoration *
+	margin: 0 auto;
+	border: 3px solid rgba(255, 255, 255, 0.55);
+	border-radius: 4px;
+	box-shadow: 6px 6px 18px 1px rgba(27, 73, 126, 0.33);
+	width: 1024px;
+	height: 600px;
+	margin-top: 50px;
+	/**/
 }
 
 #header {
+	overflow: hidden;
+}
+
+#footer {
+	text-align: center;
+}
+
+#header,#footer {
 	width: 100%;
-	height: 7%;
+	height: 6%;
+	min-height: 30px;
 	background-color: rgba(255, 255, 255, 0.78);
 }
 
-#header-inner {
+#header img,#footer img {
+	height: 100%;
+	opacity: 0.72;
+	vertical-align: middle;
+}
+
+#header img {
+	float: left;
+}
+
+#footer img {
+	height: 80%;
+}
+
+#header div.middle {
 	float: right;
 }
 
 #main {
-	height: 86%;
-	min-height: 86%;
-}
-
-#footer {
-	width: 100%;
-	height: 7%;
-	text-align: center;
-	background-color: rgba(255, 255, 255, 0.78);
-}
-
-#footer a {
-	margin-right: 5px;
-	margin-left: 5px;
-}
-
-#header,#footer {
-	overflow: hidden;
-	position: relative;
-}
-
-#header[id],#footer[id] {
-	display: table;
-	position: static;
-}
-
-#header-middle[id],#footer-middle[id] {
-	display: table-cell;
-	vertical-align: middle;
-	width: 100%;
-	position: static;
-}
-
-#header img {
-	height: 100%;
-	opacity: 0.72;
+	height: 88%;
 }

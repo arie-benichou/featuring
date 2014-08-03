@@ -2,31 +2,39 @@
 	width: 20%;
 	height: 100%;
 	background-color: rgba(0, 150, 255, 0.35);
-	overflow: auto;	
+	overflow: hidden;
+	overflow-x: hidden;	
+}
+
+#contacts div.self {
+	height: 100%;	
+	overflow: auto;
 	overflow-x: hidden;
 }
 
-div.contact {
-	margin: 0;
-	margin-top: 1px;
-	margin-bottom: 1px;
-	border-bottom: 1px solid white;
-	height: 55px;
-	clear: both;
-	overflow: hidden;
-}
-
-div.contact img {
+#contacts div.separator {
+	width: 1px;
+	height: 100%;
+	background-color: white;
 	float: left;
-	margin-left: 6px;
-	margin-top: 1px;
-	margin-right: 5px;
-	width: 55px;
-	height: 55px;
 }
 
-div.name {
-	line-height: 55px;
-	font-size: 70%;
+#contacts div.contact {
+	height: 5%;
+	min-height: 72px;
+	border-bottom: 1px solid white;
+	overflow: hidden;	
+}
+
+#contacts span.name {
 	color: white;
+	font-size: 70%;
+}
+
+#contacts div.contact img {
+	opacity: 0.95;
+	vertical-align: middle;
+	margin-top: 2px;
+	margin-right: 4px;
+	margin-left: 4px;
 }

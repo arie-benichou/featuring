@@ -2,24 +2,11 @@ body {
 	margin: 0;
 	padding: 0;
 	color: rgb(0, 72, 126);
-	/*
-	font-family: sans-serif;
-	font-family: 'Mouse Memoirs', sans-serif;
-	font-family: 'Francois One', sans-serif;
-	*/
-	font-family : 'Ubuntu', sans-serif;	
-	font-size: 135%;
-	/* just here for sandbox decoration *
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 150%;
 	background-color: rgb(139, 154, 173);
-	overflow: hidden;
-	margin: 0 auto;
-	border: 3px solid rgba(255, 255, 255, 0.55);
-	border-radius: 4px;
-	box-shadow: 6px 6px 18px 1px rgba(27, 73, 126, 0.33);	
-	width: 1024px;
-	height: 600px;
-	margin-top: 50px;
-	/**/
+	min-height: 320px;
+	min-width: 320px;
 }
 
 #overlay {
@@ -31,7 +18,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #373B3F;
-	background-color: rgb(221,228,237);
+	background-color: rgb(221, 228, 237);
 	background-color: rgb(194, 212, 235);
 	z-index: 9999999999999999;
 }

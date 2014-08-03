@@ -224,7 +224,7 @@
 					console.info("JS loaded !");
 					setTimeout(function() {
 						console.info("Application is ready !");
-						$("#overlay").fadeOut(375, function() {
+						$("#overlay").fadeOut(575, function() {
 							$("#overlay").remove();
 						});
 					}, 375);
