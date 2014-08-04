@@ -58,7 +58,7 @@ var loadScript = function(scriptURL, callback) {
 var loadFeatureDescription = function(context, parentPath, featureName, callback) {
 
 	var url = path(parentPath, featureName) + "features.json";
-	//console.info("loading : " + url);
+	// console.info("loading : " + url);
 
 	$.getJSON(url).done(function(data) {
 		Object.keys(data).map(function(childFeature) {
@@ -85,7 +85,7 @@ var loadFeature = function(context, parentPath, featureName, callback) {
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var render = function(featureName, data, callback) {
 	console.info("rendering " + featureName);
-	$("head").append("<style>" + data.styles + "<style>");
+	$("head").append("<style>" + data.styles + "</style>");
 	var $html = $(data.html);
 	var images = $html.find("img");
 	images.bind("error", function() {
@@ -117,9 +117,9 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 			var np = path(parentPath, featureName);
 			loadFeatureDescription(context[child], np, child, function(context, parentPath, featureName) {
 				loadFeature(context, parentPath, featureName, function(data) {
-						render(featureName, data, function() {
-							callbackForChildren(context, parentPath, featureName);
-						});
+					render(featureName, data, function() {
+						callbackForChildren(context, parentPath, featureName);
+					});
 				});
 			});
 		});
