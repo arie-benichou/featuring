@@ -1,5 +1,5 @@
 {
-	"clock"					: "true",	
-	"yetAnotherFeature" 	: "true",
-	"contacts" 				: "true"
+	"yetAnotherFeature" 	: "true",	
+	"contacts" 				: "true",
+	"clock"					: "true"
 }

@@ -15,10 +15,13 @@
 }
 
 #gmap {
+	/*
 	width: 306px;
 	float: left;
 	margin: 2px;
 	margin-right: 24px;
+	*/
+	margin: 24px;
 }
 
 #yetAnotherFeature div.text {
