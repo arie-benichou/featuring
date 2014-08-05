@@ -3,11 +3,14 @@ features router
 linearize features
 disabled feature
 
-system clock should be a core feature
 screensaver
 
 offline mode
 caching
 
+compact
+
 deploy to repository
 fetch from repository
+
+demo

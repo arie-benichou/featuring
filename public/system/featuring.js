@@ -148,7 +148,8 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 	var callbackForChildren = function(context, parentPath, featureName) {
 		var children = Object.keys(context);
 		children.map(function(child) {
-			var np = path(parentPath, featureName);
+			//var np = path(parentPath, featureName);
+		  var np = initialPath;
 			loadFeatureDescription(context[child], np, child, function(context, parentPath, featureName) {
 				loadFeature(context, parentPath, featureName, function(data) {
 					render(context, parentPath, featureName, data, function() {
