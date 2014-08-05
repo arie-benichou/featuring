@@ -1,5 +1,4 @@
 // TODO check unused feature and undeclared feature
-// TODO import features assets
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var appendChild = function(label, parent) {
 	parent = parent || {};
@@ -100,16 +99,31 @@ var loadFeatureScript = function(context, parentPath, featureName, callback) {
 	});
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
-var render = function(featureName, data, callback) {
+var render = function(context, parentPath, featureName, data, callback) {
 	console.info("rendering " + featureName);
 	$("head").append("<style>" + data.styles + "</style>");
 	var $html = $(data.html);
 	var images = $html.find("img");
+
+	var rewritingPathPrefix = path(parentPath, featureName) + "assets" + "/";
+	var pattern = /^\.\/assets\/(.*)/;
+
+	images.map(function(i, e) {
+		var src = $(e).attr("src");
+		var match = src.match(pattern);
+		if (match != null) {
+			var suffix = match[1];
+			console.info("rewriting image src for " + suffix)
+			$(e).attr("src", rewritingPathPrefix + suffix);
+		}
+	});
+
 	images.bind("error", function() {
-		$(this).attr("alt", this.src);
 		// TODO extract constant
+		$(this).attr("alt", this.src);
 		$(this).attr("src", "/i404.png");
 	});
+
 	$("#" + featureName).replaceWith($html);
 	$("#" + featureName).hide();
 	$("#" + featureName).fadeIn(875, callback);
@@ -134,7 +148,7 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 			var np = path(parentPath, featureName);
 			loadFeatureDescription(context[child], np, child, function(context, parentPath, featureName) {
 				loadFeature(context, parentPath, featureName, function(data) {
-					render(featureName, data, function() {
+					render(context, parentPath, featureName, data, function() {
 						loadFeatureScript(context, parentPath, featureName, function() {
 							callbackForChildren(context, parentPath, featureName);
 						})
@@ -146,15 +160,11 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 
 	loadFeatureDescription(initialContext, initialPath, initialFeatureName, function(context, parentPath, featureName) {
 		loadFeature(context, parentPath, featureName, function(data) {
-			//$("#overlay").fadeOut(575, function() {
-				//$("#overlay").remove();
-				render(featureName, data, function() {
-					loadFeatureScript(context, parentPath, featureName, function() {
-						callbackForChildren(context, parentPath, featureName);
-					});
+			render(context, parentPath, featureName, data, function() {
+				loadFeatureScript(context, parentPath, featureName, function() {
+					callbackForChildren(context, parentPath, featureName);
 				});
-			//});
-
+			});
 		});
 	});
 
