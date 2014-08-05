@@ -1,3 +1,4 @@
+// TODO check unused feature and undeclared feature
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var appendChild = function(label, parent) {
 	parent = parent || {};
@@ -83,6 +84,21 @@ var loadFeature = function(context, parentPath, featureName, callback) {
 	});
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
+var loadFeatureScript = function(context, parentPath, featureName, callback) {
+	var prefix = path(parentPath, featureName);
+	loadScript(prefix + "protocol.js", function(url) {
+		//console.info("loading script: " + url);
+		//console.debug(window[featureName]);
+		var protocol = new window[featureName]["protocol"]();
+		//console.debug(protocol);
+		var worker = new Worker(prefix + "main.js");
+		worker.addEventListener('message', function(e) {
+			protocol.handle(e)
+		}, false);
+		callback();
+	});
+};
+/*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var render = function(featureName, data, callback) {
 	console.info("rendering " + featureName);
 	$("head").append("<style>" + data.styles + "</style>");
@@ -118,7 +134,9 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 			loadFeatureDescription(context[child], np, child, function(context, parentPath, featureName) {
 				loadFeature(context, parentPath, featureName, function(data) {
 					render(featureName, data, function() {
-						callbackForChildren(context, parentPath, featureName);
+						loadFeatureScript(context, parentPath, featureName, function() {
+							callbackForChildren(context, parentPath, featureName);					
+						})
 					});
 				});
 			});
@@ -128,7 +146,9 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 	loadFeatureDescription(initialContext, initialPath, initialFeatureName, function(context, parentPath, featureName) {
 		loadFeature(context, parentPath, featureName, function(data) {
 			render(featureName, data, function() {
-				callbackForChildren(context, parentPath, featureName);
+				loadFeatureScript(context, parentPath, featureName, function() {
+					callbackForChildren(context, parentPath, featureName);					
+				})
 			});
 		});
 	});
