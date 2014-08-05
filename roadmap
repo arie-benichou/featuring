@@ -1,16 +1,19 @@
+unified bootstrap
+
 features router
 
-linearize features
 disabled feature
 
-screensaver
+tests
+
+screensaver feature
 
 offline mode
-caching
 
-compact
+caching app
+compact app
 
 deploy to repository
 fetch from repository
 
-demo
+demo mode
