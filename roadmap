@@ -1,0 +1,12 @@
+features router
+
+linearize features
+
+system clock should be a core feature
+screensaver
+
+offline mode
+caching
+
+deploy to repository
+fetch from repository
