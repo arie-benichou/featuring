@@ -102,7 +102,9 @@ var loadFeatureScript = function(context, parentPath, featureName, callback) {
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var render = function(context, parentPath, featureName, data, callback) {
+
 	console.info("rendering " + featureName);
+
 	$("head").append("<style>" + data.styles + "</style>");
 	var $html = $(data.html);
 	var images = $html.find("img");
@@ -137,12 +139,11 @@ var path = function(parentPath, featureName) {
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
 
-	var root = appendChild("/");
-	var home = appendChild("home", root);
-
-	var initialContext = home;
 	var initialPath = window.location.origin + "/";
 	var initialFeatureName = "home";
+
+	var root = appendChild("/");
+	var initialContext = appendChild(initialFeatureName, root);
 
 	var callbackForChildren = function(context, parentPath, featureName) {
 		var children = Object.keys(context);
@@ -162,6 +163,10 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 
 	loadFeatureDescription(initialContext, initialPath, initialFeatureName, function(context, parentPath, featureName) {
 		loadFeature(context, parentPath, featureName, function(data) {
+		  
+		  // TODO à revoir...
+			$("body").append("<feature id='" + initialFeatureName + "'></feature>");
+			
 			render(context, parentPath, featureName, data, function() {
 				loadFeatureScript(context, parentPath, featureName, function() {
 					callbackForChildren(context, parentPath, featureName);

@@ -1,6 +1,7 @@
 features router
 
 linearize features
+disabled feature
 
 system clock should be a core feature
 screensaver

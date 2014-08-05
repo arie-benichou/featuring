@@ -1,3 +1,5 @@
+@import url(/core/styles.css); /* TODO à revoir ...*/
+
 .middle {
 	position: relative;
 	top: 50%;
