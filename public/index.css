@@ -9,31 +9,6 @@ body {
 	min-width: 320px;
 }
 
-#overlay {
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	margin: 0;
-	padding: 0;
-	background-color: #373B3F;
-	background-color: rgb(221, 228, 237);
-	background-color: rgb(194, 212, 235);
-	z-index: 9999999999999999;
-	cursor: none;
-}
-
-#overlay div {
-	width: 250px;
-	height: 250px;
-	margin-left: -125px;
-	margin-top: -125px;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-}
-
 a:link {
 	text-decoration: none;
 	color: white;
