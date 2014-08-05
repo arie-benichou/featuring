@@ -1,4 +1,5 @@
 // TODO check unused feature and undeclared feature
+// TODO import features assets
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var appendChild = function(label, parent) {
 	parent = parent || {};
