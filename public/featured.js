@@ -24,10 +24,11 @@ String.prototype.repeat = function(n) {
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var breadthfirstTailRec = function(children, level) {
+	console.debug("=================================");
 	if (children.length != 0) {
 		var nextChildren = [];
 		children.map(function(child) {
-			console.debug("  ".repeat(level) + ". " + child.name);
+			console.debug(child.name);
 			next(child.context[child.name]).map(function(c) {
 				nextChildren.push(c);
 			});
@@ -36,8 +37,9 @@ var breadthfirstTailRec = function(children, level) {
 	}
 };
 var breadthfirst = function(context, name) {
-	// console.debug(name);
-	breadthfirstTailRec(next(context), 0);
+	console.debug("=================================");
+	console.debug(name);
+	breadthfirstTailRec(next(context));
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var loadScript = function(scriptURL, callback) {
@@ -167,6 +169,11 @@ loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", f
 			});
 		});
 	});
+
+	// TODO ? get notfified when it's over
+	setTimeout(function() {
+		breadthfirst(root, "/");
+	}, 5000);
 
 });
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
