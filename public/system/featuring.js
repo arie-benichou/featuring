@@ -1,83 +1,63 @@
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 var System = System || {};
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
+System.loadScript = function(scriptURL, callback) {
+  var ready = false;
+  var script = document.createElement("script");
+  script.onload = script.onreadystatechange = function() {
+    if (!ready && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
+      ready = true;
+      callback(scriptURL);
+    }
+  };
+  script.src = scriptURL;
+  var head = document.head;
+  if (!head) document.body.insertAdjacentElement("beforeBegin", document.createElement("head"));
+  var head = document.getElementsByTagName("head")[0];
+  head.appendChild(script);
+};
+System.Trigger = function(n, cb) {
+  this.i = 0;
+  this.n = n;
+  this.cb = cb;
+  this.acc = [];
+  if (n === 0) this.cb(this.acc);
+};
+System.Trigger.prototype = {
+  constructor : System.Trigger,
+  notify : function(data) {
+    this.acc.push(data);
+    if (++this.i === this.n) this.cb(this.acc);
+  }
+};
+/*------------------------------------------------------------------8<------------------------------------------------------------------*/
 System.Featuring = function(data) {
-  this.initialFeatureName = data.initialFeatureName || "home";
+  var data = data || {};
+  this.featuresFolder = data.featuresFolder || "features";
+  this.initialPath = data.initialPath || window.location.origin;
+  this.notFoundImage = data.notFoundImage || this.path("featuring") + "assets/i404.png";
+  this.renderingTransitionDuration = data.renderingTransitionDuration || 875;
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 System.Featuring.prototype = {
-
   constructor : System.Featuring,
-
-  appendChild : function(label, parent) {
-    parent = parent || {};
-    parent[label] = {};
-    return parent[label];
+  path : function(featureName) {
+    return [ this.initialPath, this.featuresFolder, featureName, "" ].join("/");
   },
-
-  next : function(node) {
-    var tmp = [];
-    var children = Object.keys(node);
-    children.map(function(child) {
-      tmp.push({
-        context : node,
-        name : child
-      });
-    });
-    return tmp;
-  },
-
-  breadthfirstTailRec : function(children) {
-    console.debug("=================================");
-    if (children.length != 0) {
-      var nextChildren = [];
-      children.map(function(child) {
-        console.debug(child.name);
-        this.next(child.context[child.name]).map(function(c) {
-          nextChildren.push(c);
-        });
-      }.bind(this));
-      this.breadthfirstTailRec(nextChildren);
-    }
-  },
-
-  breadthfirst : function(context, name) {
-    console.debug("=================================");
-    console.debug(name);
-    this.breadthfirstTailRec(this.next(context));
-  },
-
-  loadScript : function(scriptURL, callback) {
-    var ready = false;
-    var script = document.createElement("script");
-    script.onload = script.onreadystatechange = function() {
-      if (!ready && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
-        ready = true;
-        callback(scriptURL);
-      }
-    };
-    script.src = scriptURL;
-    var head = document.head;
-    if (!head) document.body.insertAdjacentElement("beforeBegin", document.createElement("head"));
-    var head = document.getElementsByTagName("head")[0];
-    head.appendChild(script);
-  },
-
-  loadFeatureDescription : function(context, parentPath, featureName, callback) {
-    var url = this.path(parentPath, featureName) + "features.json";
+  loadFeatureDescription : function(featureName, callback) {
+    var url = this.path(featureName) + "features.json";
     $.getJSON(url).done(function(data) {
+      var children = [];
       Object.keys(data).map(function(childFeature) {
-        if (data[childFeature]) this.appendChild(childFeature, context);
-      }.bind(this));
+        if (data[childFeature]) children.push(childFeature);
+      });
+      callback(children);
     }.bind(this)).fail(function() {
       console.error("Error while loading/parsing : " + url);
-    }).always(function() {
-      callback(context, parentPath, featureName);
     });
   },
-
-  loadFeature : function(context, parentPath, featureName, callback) {
-    var prefix = this.path(parentPath, featureName);
+  loadFeature : function(featureName, callback) {
+    var prefix = this.path(featureName);
     data = {};
     $.when($.get(prefix + "styles.css"), $.get(prefix + "fragment.html")).then(function(styles, fragment) {
       data.html = fragment[0];
@@ -87,94 +67,110 @@ System.Featuring.prototype = {
       console.error("Error while loading : " + path + ".css");
     });
   },
-
-  loadFeatureScript : function(context, parentPath, featureName, callback) {
-    var prefix = this.path(parentPath, featureName);
-    this.loadScript(prefix + "protocol.js", function(url) {
-      var protocol = new window[featureName]["protocol"]();
+  loadFeatureScript : function(featureName, children, callback) {
+    var prefix = this.path(featureName);
+    System.loadScript(prefix + "protocol.js", function(url) {
+      var protocol = new window[featureName]["protocol"](featureName, children, callback);
       var worker = new Worker(prefix + "main.js");
       worker.addEventListener('message', function(e) {
-        protocol.handle(e)
+        protocol.handle(e);
       }, false);
-      callback();
+      worker.postMessage(featureName);
     });
   },
-
-  // TODO check unused feature and undeclared feature
-  render : function(context, parentPath, featureName, data, callback) {
-    console.info("rendering " + featureName);
+  render : function(featureName, data, callback) {
     $("head").append("<style>" + data.styles + "</style>");
     var $html = $(data.html);
     var images = $html.find("img");
-    var rewritingPathPrefix = this.path(parentPath, featureName) + "assets" + "/";
+    var rewritingPathPrefix = this.path(featureName) + "assets" + "/";
     var pattern = /^\.\/assets\/(.*)/;
     images.map(function(i, e) {
       var src = $(e).attr("src");
       var match = src.match(pattern);
       if (match != null) {
         var suffix = match[1];
-        console.info("rewriting image src for " + suffix)
         $(e).attr("src", rewritingPathPrefix + suffix);
       }
     });
     images.bind("error", function() {
       $(this).attr("alt", this.src);
-      $(this).attr("src", "/i404.png"); // TODO extract constant
+      $(this).attr("src", this.notFoundImage);
     });
-    $("#" + featureName).replaceWith($html);
-    $("#" + featureName).hide();
-    $("#" + featureName).fadeIn(875, callback);
+    var featureContainer = $("#" + featureName);
+    featureContainer.replaceWith($html);
+    featureContainer = $("#" + featureName);
+    featureContainer.hide();
+    featureContainer.fadeIn(this.renderingTransitionDuration, callback);
   },
-
-  path : function(parentPath, featureName) {
-    return parentPath + "features/" + featureName + "/";
-  },
-
-  callbackForParent : function(context, parentPath, featureName) {
-    this.loadFeatureDescription(context, parentPath, featureName, function(context, parentPath, featureName) {
-      this.loadFeature(context, parentPath, featureName, function(data) {
-        // TODO à revoir...
-        $("body").append("<feature id='" + featureName + "'></feature>");
-        this.render(context, parentPath, featureName, data, function() {
-          this.loadFeatureScript(context, parentPath, featureName, function() {
-            this.callbackForChildren(context, parentPath, featureName);
-          }.bind(this));
+  run : function(featureName, callback) {
+    // TODO populate and pass a mutable object context    
+    this.loadFeatureDescription(featureName, function(children) {
+      this.loadFeature(featureName, function(data) {
+        this.render(featureName, data, function() {
+          this.loadFeatureScript(featureName, children, callback);
         }.bind(this));
       }.bind(this));
-    }.bind(this));
-  },
-
-  callbackForChildren : function(context, parentPath, featureName) {
-    var children = Object.keys(context);
-    children.map(function(child) {
-      this.loadFeatureDescription(context[child], parentPath, child, function(context, parentPath, featureName) {
-        this.loadFeature(context, parentPath, featureName, function(data) {
-          this.render(context, parentPath, featureName, data, function() {
-            this.loadFeatureScript(context, parentPath, featureName, function() {
-              this.callbackForChildren(context, parentPath, featureName);
-            }.bind(this));
-          }.bind(this));
-        }.bind(this));
-      }.bind(this));
-    }.bind(this));
-  },
-
-  run : function() {
-    this.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
-      var initialPath = window.location.origin + "/";
-      var root = this.appendChild("/");
-      var initialContext = this.appendChild(this.initialFeatureName, root);
-      this.callbackForParent(initialContext, initialPath, this.initialFeatureName);
-      // TODO ? get notfified when it's over
-      setTimeout(function() {
-        this.breadthfirst(root, "/");
-      }.bind(this), 5000);
     }.bind(this));
   }
-  
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
-new System.Featuring({
-  initialFeatureName : "home",
-}).run();
+System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
+
+  $("body").append("<feature id='featuring'></feature>");
+
+  new System.Featuring({
+    featuresFolder : "system",
+    renderingTransitionDuration : -1
+  }).run("featuring", function(featureName, children) {
+
+    console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+    console.info("Featuring");
+    console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+
+    var triggerForChildren = new System.Trigger(1, function(data) {
+      console.info("That's all folks !");
+      console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+    });
+
+    var f = function(child) {
+
+      new System.Featuring().run(child, function(featureName, children) {
+
+        console.info(" . " + featureName);
+        console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+
+        var triggerForDirectChildren = new System.Trigger(children.length, function(data) {
+          if (data.length) console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+          data.map(function(e) {
+            e.children.map(function(c) {
+              ++triggerForChildren.n;
+              f(c);
+            });
+          });
+          triggerForChildren.notify();
+        });
+
+        children.map(function(child) {
+          new System.Featuring().run(child, function(featureName, children) {
+            console.info(" . " + featureName);
+            triggerForDirectChildren.notify({
+              featureName : featureName,
+              children : children
+            });
+          });
+        })
+
+      });
+
+    };
+
+    // TODO use router to boot on main feature
+    var main = "home";
+    $("#featuring").append("<feature id='" + main + "'></feature>");
+
+    f(main);
+
+  });
+
+});
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/

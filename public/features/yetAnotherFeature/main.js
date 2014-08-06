@@ -1,7 +1,3 @@
 self.addEventListener('message', function(e) {
-	console.debug(e.data);
+  self.postMessage(e.data);
 }, false);
-
-self.postMessage({
-	type : "ready"
-});

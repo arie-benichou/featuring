@@ -1,19 +1,22 @@
-unified bootstrap
+! features router
 
-features router
+  check unused feature and undeclared feature
+  use feature fragment as jquery context
+  
+  Screensaver Feature
+  
+  Pouvoir jouer un scénario de messages
+  Demo mode		
+  Tests
+  
+  Offline mode
+  Caching app
+  Compact app
+  
+  Deploy to repository
+  Fetch from repository
 
-disabled feature
-
-tests
-
-screensaver feature
-
-offline mode
-
-caching app
-compact app
-
-deploy to repository
-fetch from repository
-
-demo mode
+? mouseover on a feature could decorate it
+? double click on a feature could maximize it
+? feature: as root container : root.html
+? worker to load a feature => ajax request => (response: string) || (head:String, body:String)
