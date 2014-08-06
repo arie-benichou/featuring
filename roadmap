@@ -1,8 +1,7 @@
 ! features router
 
   check unused feature and undeclared feature
-  use feature fragment as jquery context
-  
+    
   Screensaver Feature
   
   Pouvoir jouer un scénario de messages
@@ -15,6 +14,8 @@
   
   Deploy to repository
   Fetch from repository
+
+? ensure feature fragment is a child element
 
 ? mouseover on a feature could decorate it
 ? double click on a feature could maximize it
