@@ -1,8 +1,6 @@
 ! worker boilerplate
 ! check unused feature and undeclared feature
 
-? feature: as root container : root.html
-
 ? ensure feature fragment is a child element
     
   Screensaver Feature

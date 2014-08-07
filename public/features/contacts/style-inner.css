@@ -1,29 +1,16 @@
 #contacts {
-	width: 20%;
 	height: 100%;
+	border-left: 1px solid white;
 	background-color: rgba(0, 150, 255, 0.35);
 	overflow: hidden;
-	overflow-x: hidden;	
-}
-
-#contacts div.self {
-	height: 100%;	
 	overflow: auto;
-	overflow-x: hidden;
-}
-
-#contacts div.separator {
-	width: 1px;
-	height: 100%;
-	background-color: white;
-	float: left;
 }
 
 #contacts div.contact {
 	height: 5%;
 	min-height: 72px;
 	border-bottom: 1px solid white;
-	overflow: hidden;	
+	overflow: hidden;
 }
 
 #contacts span.name {

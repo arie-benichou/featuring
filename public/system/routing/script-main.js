@@ -16,7 +16,7 @@ routing.protocol.prototype = {
 };
 
 (function() {
-  var mainFeature = window.location.hash.substring(1) || "home";
+  var mainFeature = window.location.hash.substring(1);// || "home";
   window.location.hash = mainFeature;
   window.addEventListener("hashchange", function(e) {
     if (mainFeature != window.location.hash.substring(1)) {

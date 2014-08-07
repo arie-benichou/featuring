@@ -1,0 +1,11 @@
+#header img {
+	height: 100%;
+	opacity: 0.72;
+	vertical-align: middle;
+	float: left;
+}
+
+#header div.middle {
+	margin-right: 2px;
+	float: right;
+}

@@ -1,0 +1,16 @@
+#page {
+	background-color: rgba(0, 72, 126, 0.45);	
+}
+
+#page div.self {
+	margin: 24px;
+}
+
+#page div.text p {
+	margin-top: 22px;
+	margin-bottom: 22px;
+	text-align: left;
+	font-size: 125%;
+	color: white;
+	text-align: left;
+}
