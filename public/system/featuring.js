@@ -100,10 +100,11 @@ System.Featuring.prototype = {
     featureContainer.replaceWith($html);
     featureContainer = $("#" + featureName);
     featureContainer.hide();
-    featureContainer.fadeIn(this.renderingTransitionDuration, callback);
+    featureContainer.fadeIn(this.renderingTransitionDuration);
+    setTimeout(callback, this.renderingTransitionDuration - 1);
   },
   run : function(featureName, callback) {
-    // TODO populate and pass a mutable object context    
+    // TODO populate and pass a mutable object context
     this.loadFeatureDescription(featureName, function(children) {
       this.loadFeature(featureName, function(data) {
         this.render(featureName, data, function() {
@@ -114,63 +115,45 @@ System.Featuring.prototype = {
   }
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
+console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+console.info("Featuring - version 0.1.4");
+console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+/*------------------------------------------------------------------8<------------------------------------------------------------------*/
 System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
-
-  $("body").append("<feature id='featuring'></feature>");
-
-  new System.Featuring({
+  var enableFeature = function(featureName, configuration, parentTrigger) {
+    console.info(" . " + featureName);
+    new System.Featuring(configuration).run(featureName, function(featureName, children) {
+      var childTrigger = new System.Trigger(children.length, function(data) {
+        parentTrigger.notify(featureName);
+      });
+      children.map(function(child) {
+        enableFeature(child, configuration, childTrigger);
+      });
+    });
+  };
+  var userFeatures = function() {
+    console.info(" Enabling user features : ");
+    // TODO use sub feature 'router' for core;
+    var mainFeature = "home";
+    $("body").append("<feature id='" + mainFeature + "'></feature>");
+    var trigger = new System.Trigger(1, function(data) {
+      console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+      console.info("Done");
+      console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+    });
+    enableFeature(mainFeature, {
+      featuresFolder : "features",
+      renderingTransitionDuration : 500
+    }, trigger);
+  };
+  var trigger = new System.Trigger(1, function() {
+    console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+    userFeatures();
+  });
+  console.info(" Enabling core features :");
+  enableFeature("core", {
     featuresFolder : "system",
     renderingTransitionDuration : -1
-  }).run("featuring", function(featureName, children) {
-
-    console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-    console.info("Featuring");
-    console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-
-    var triggerForChildren = new System.Trigger(1, function(data) {
-      console.info("That's all folks !");
-      console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-    });
-
-    var f = function(child) {
-
-      new System.Featuring().run(child, function(featureName, children) {
-
-        console.info(" . " + featureName);
-        console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-
-        var triggerForDirectChildren = new System.Trigger(children.length, function(data) {
-          if (data.length) console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-          data.map(function(e) {
-            e.children.map(function(c) {
-              ++triggerForChildren.n;
-              f(c);
-            });
-          });
-          triggerForChildren.notify();
-        });
-
-        children.map(function(child) {
-          new System.Featuring().run(child, function(featureName, children) {
-            console.info(" . " + featureName);
-            triggerForDirectChildren.notify({
-              featureName : featureName,
-              children : children
-            });
-          });
-        })
-
-      });
-
-    };
-
-    // TODO use router to boot on main feature
-    var main = "home";
-    $("#featuring").append("<feature id='" + main + "'></feature>");
-
-    f(main);
-
-  });
-
+  }, trigger);
 });
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/

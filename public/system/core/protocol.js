@@ -1,11 +1,11 @@
-var featuring = {};
-featuring.protocol = function(featureName, children, callback) {
+var core = {};
+core.protocol = function(featureName, children, callback) {
   this.featureName = featureName;
   this.children = children;
   this.callback = callback;
 };
-featuring.protocol.prototype = {
-  constructor : featuring.protocol,
+core.protocol.prototype = {
+  constructor : core.protocol,
   handle : function(e) {
     var data = e.data;
     if (e.data === this.featureName) {
