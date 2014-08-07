@@ -132,25 +132,29 @@ System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min
     });
   };
   var userFeatures = function() {
-    console.info(" Enabling user features : ");
-    // TODO use sub feature 'router' for core;
-    var mainFeature = "home";
-    $("body").append("<feature id='" + mainFeature + "'></feature>");
+    console.info(" user features : ");
     var trigger = new System.Trigger(1, function(data) {
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
       console.info("Done");
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     });
+    
+    // TODO use messaging 
+    var mainFeature = window.location.hash.substring(1);
+    
+    $("body").append("<feature id='" + mainFeature + "'></feature>");
+    
     enableFeature(mainFeature, {
       featuresFolder : "features",
       renderingTransitionDuration : 500
     }, trigger);
+
   };
   var trigger = new System.Trigger(1, function() {
     console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     userFeatures();
   });
-  console.info(" Enabling core features :");
+  console.info(" system features :");
   enableFeature("core", {
     featuresFolder : "system",
     renderingTransitionDuration : -1

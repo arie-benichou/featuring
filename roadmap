@@ -1,6 +1,9 @@
-! features router
-
+! worker boilerplate
 ! check unused feature and undeclared feature
+
+? feature: as root container : root.html
+
+? ensure feature fragment is a child element
     
   Screensaver Feature
   
@@ -14,10 +17,7 @@
   
   Deploy to repository
   Fetch from repository
-
-? ensure feature fragment is a child element
-
+  
 ? mouseover on a feature could decorate it
 ? double click on a feature could maximize it
-? feature: as root container : root.html
 ? worker to load a feature => ajax request => (response: string) || (head:String, body:String)

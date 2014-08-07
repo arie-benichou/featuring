@@ -1,3 +1,4 @@
 {
-  "easterEggs": true
+  "routing"    : true,  
+  "easterEggs"  : true
 }
