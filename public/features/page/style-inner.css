@@ -1,16 +1,27 @@
 #page {
-	background-color: rgba(0, 72, 126, 0.45);	
+	background-color: rgba(0, 72, 126, 0.45);
+	overflow: hidden;
 }
 
 #page div.self {
+	
+}
+
+#page div.text {
 	margin: 24px;
 }
 
 #page div.text p {
-	margin-top: 22px;
-	margin-bottom: 22px;
-	text-align: left;
-	font-size: 125%;
+	font-size: 135%;
 	color: white;
 	text-align: left;
+	margin: 0;
+	margin-top: 22px;
+	margin-bottom: 22px;
+}
+
+#gmap {
+	margin: 0;	
+	background-color: rgba(0, 72, 126, 0.72);
+	border-top: 1px solid rgb(200, 200, 200);
 }
