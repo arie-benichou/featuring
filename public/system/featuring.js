@@ -133,21 +133,33 @@ System.Featuring.prototype = {
 console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
 console.info("Featuring - version 0.1.4");
 console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+
 System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
+  
   var enableFeature = function(featureName, configuration, parentTrigger) {
+    
     console.info(" . " + featureName);
+    
     new System.Featuring(configuration).run(featureName, function(featureName, children) {
+      
       var childTrigger = new System.Trigger(children.length, function(data) {
         parentTrigger.notify(featureName);
       });
+      
       configuration.isOuter = false;
+      
       children.map(function(child) {
         enableFeature(child, configuration, childTrigger);
       });
+      
     });
+    
   };
+
   var userFeatures = function() {
+    
     console.info(" user features : ");
+    
     var trigger = new System.Trigger(1, function(data) {
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
       console.info("Done");
@@ -157,7 +169,7 @@ System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min
     var configuration = {
       isOuter : true,
       featuresFolder : "features",
-      renderingTransitionDuration : 375
+      renderingTransitionDuration : 450
     };
     
     // TODO use messaging
@@ -170,14 +182,18 @@ System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min
     $("body").append("<feature id='" + mainFeature + "'></feature>");
     enableFeature(mainFeature, configuration, trigger);
   };
-  var trigger = new System.Trigger(1, function() {
+  
+  var trigger = new System.Trigger(1, function(data) {
     console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     userFeatures();
   });
+  
   console.info(" system features :");
+  
   enableFeature("core", {
     featuresFolder : "system",
-    renderingTransitionDuration : -1
+    renderingTransitionDuration : -2000
   }, trigger);
+  
 });
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/

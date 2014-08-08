@@ -13,3 +13,19 @@ gmap.protocol.prototype = {
     }
   }
 };
+
+// TODO use messaging
+//$("#gmap").css({
+//  border : "1px solid red"
+//});
+setTimeout(function() {
+  $("#gmap .self").hide();
+  $("#gmap .self").css({
+    opacity : 1
+  });
+  $("#gmap .self").fadeIn(1000, function() {
+//    $("#gmap").css({
+//      border : "none"
+//    });
+  });
+}, 1500);

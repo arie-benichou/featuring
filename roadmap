@@ -1,3 +1,4 @@
+! loader: f(element, callback) : create an new overlay on element while loading, then fadeout (and destroy).
 ! 404 router handler
 ! worker boilerplate
 
