@@ -1,17 +1,14 @@
-#page {
+.page > .self {
 	height: 100%;
 }
 
-#page>.self {
-}
-
-#page div.text {
+.page div.text {
 	background-color: rgba(244, 141, 64, 1);
 	padding: 22px;
 	border-bottom: 1px solid white;
 }
 
-#page div.text p {
+.page div.text p {
 	font-size: 190%;
 	color: rgb(44, 71, 117);
 	color: rgb(234, 221, 210);

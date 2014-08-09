@@ -1,19 +1,19 @@
-#header img {
+.header .self img {
 	height: 100%;
 	opacity: 0.72;
 	vertical-align: middle;
 }
 
-#header .blocks {
+.header .self .blocks {
 	float: right;
 	height: 100%;
 }
 
-#header .blocks div {
+.header .self .blocks div {
 	float: right;
 }
 
-#header .middle div {
+.header  .middle div {
 	margin: 2px;
 	padding: 2px;
 }

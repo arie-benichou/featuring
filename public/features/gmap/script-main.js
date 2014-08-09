@@ -14,20 +14,23 @@ gmap.protocol.prototype = {
   }
 };
 
-// TODO use messaging
-setTimeout(function() {
-  var overlay = $("#spinner");
-  var parent = overlay.parent();
-  overlay.width(parent.width());
-  overlay.height(parent.height() / 2);
-  overlay.css({
-    "position" : "absolute",
-    "z-index" : "9999999999999",
-  });
+(function() {
+  // TODO use messaging
+  var feature = "gmap";
   setTimeout(function() {
-    overlay.fadeOut(1000, function() {
-      overlay.remove();
+    var overlay = $("." + feature + " .spinner");
+    $("." + feature + " .spinning-wheel").fadeOut(400, function() {
+      overlay.height(overlay.height());
+      overlay.width(overlay.width());
+      overlay.css({
+        "position" : "absolute",
+        "z-index" : "9999999999999",
+      });
+      setTimeout(function() {
+        overlay.fadeOut(1000, function() {
+          overlay.remove();
+        });
+      }, 200);
     });
-  }, 200);
-  $(".spinner").fadeOut(400, function() {});  
-}, 2000);
+  }, 2000);
+}());

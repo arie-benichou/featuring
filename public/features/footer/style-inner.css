@@ -1,8 +1,8 @@
-#footer {
+.footer {
 	text-align: center;
 }
 
-#footer img {
+.footer img {
 	height: 70%;
 	opacity: 0.72;
 	vertical-align: middle;

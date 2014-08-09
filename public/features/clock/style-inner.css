@@ -1,11 +1,4 @@
-#clock {
+.clock .self {
 	text-align: center;
 	font-size: 135%;
-	/*
-	background-color: red;
-	*/
-}
-
-#clock :first-child {
-	
 }

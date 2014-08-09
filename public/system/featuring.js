@@ -45,7 +45,7 @@ System.Featuring.prototype = {
   path : function(featureName) {
     return [ this.initialPath, this.featuresFolder, featureName, "" ].join("/");
   },
-  loadFeatureDescription : function(featureName, callback) {
+  loadFeatureDescription : function(parent, featureName, callback) {
     var url = this.path(featureName) + "features.json";
     $.getJSON(url).done(function(data) {
       var children = [];
@@ -57,19 +57,20 @@ System.Featuring.prototype = {
       console.error("Error while loading/parsing : " + url);
     });
   },
-  loadFeature : function(featureName, callback) {
+  loadFeature : function(parent, featureName, callback) {
     var prefix = this.path(featureName);
     data = {};
-    
+
     // TODO extract constants
     if (this.isOuter) {
-      $.when($.get(prefix + "style-outer.css"), $.get(prefix + "style-inner.css"), $.get(prefix + "fragment.html")).then(function(rootStyles, styles, fragment) {
-        data.html = fragment[0];
-        data.styles = rootStyles[0] + " " + styles[0];
-        callback(data);
-      }, function() {
-        console.error("Error while loading : " + path + ".css");
-      });
+      $.when($.get(prefix + "style-outer.css"), $.get(prefix + "style-inner.css"), $.get(prefix + "fragment.html"))
+          .then(function(rootStyles, styles, fragment) {
+            data.html = fragment[0];
+            data.styles = rootStyles[0] + " " + styles[0];
+            callback(data);
+          }, function() {
+            console.error("Error while loading : " + path + ".css");
+          });
     } else {
       $.when($.get(prefix + "style-inner.css"), $.get(prefix + "fragment.html")).then(function(styles, fragment) {
         data.html = fragment[0];
@@ -79,9 +80,9 @@ System.Featuring.prototype = {
         console.error("Error while loading : " + path + ".css");
       });
     }
-    
+
   },
-  loadFeatureScript : function(featureName, children, callback) {
+  loadFeatureScript : function(parent, featureName, children, callback) {
     var prefix = this.path(featureName);
     // TODO extract constants
     System.loadScript(prefix + "script-main.js", function(url) {
@@ -93,13 +94,11 @@ System.Featuring.prototype = {
       worker.postMessage(featureName);
     });
   },
-  render : function(featureName, data, callback) {
-    
-    console.info("###############################################################");
-    console.info("rendering "  + featureName);
+  render : function(parent, featureName, data, callback) {
+
+    //console.log(parent);
+
     $("head").append("<style>" + data.styles + "</style>");
-    console.log(data.html);
-    
     var $html = $(data.html);
     
     var images = $html.find("img");
@@ -118,24 +117,19 @@ System.Featuring.prototype = {
       $(this).attr("src", this.notFoundImage);
     });
     
-    var featureContainer = $("#" + featureName);
-    console.debug(featureContainer);
-    
-    featureContainer.replaceWith($html);
-    
-    featureContainer = $("#" + featureName);
-    featureContainer.hide();
-    featureContainer.fadeIn(this.renderingTransitionDuration);
-    setTimeout(callback, this.renderingTransitionDuration - 1);
-    console.info("###############################################################");    
-    //callback();
+    //var featureContainer = $((parent === "" ? "" : "." + parent) + "." + featureName);
+    var featureContainer = $("." + featureName);
+    console.log($html.html());
+    //featureContainer.replaceWith("<section class='" + featureName + "'>" + ($('<div>').append($html.clone()).html()) + "</section>");
+    featureContainer.append(($('<div>').append($html.clone()).html()));
+    callback();
   },
-  run : function(featureName, callback) {
+  run : function(parent, featureName, callback) {
     // TODO populate and pass a mutable object context
-    this.loadFeatureDescription(featureName, function(children) {
-      this.loadFeature(featureName, function(data) {
-        this.render(featureName, data, function() {
-          this.loadFeatureScript(featureName, children, callback);
+    this.loadFeatureDescription(parent, featureName, function(children) {
+      this.loadFeature(parent, featureName, function(data) {
+        this.render(parent, featureName, data, function() {
+          this.loadFeatureScript(parent, featureName, children, callback);
         }.bind(this));
       }.bind(this));
     }.bind(this));
@@ -147,65 +141,65 @@ console.info("Featuring - version 0.1.4");
 console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
 
 System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
-  
-  var enableFeature = function(featureName, configuration, parentTrigger) {
-    
+
+  var enableFeature = function(parent, featureName, configuration, parentTrigger) {
+
     console.info(" . " + featureName);
-    
-    new System.Featuring(configuration).run(featureName, function(featureName, children) {
-      
+
+    new System.Featuring(configuration).run(parent, featureName, function(featureName, children) {
+
       var childTrigger = new System.Trigger(children.length, function(data) {
         parentTrigger.notify(featureName);
       });
-      
+
       configuration.isOuter = false;
-      
+
       children.map(function(child) {
-        enableFeature(child, configuration, childTrigger);
+        enableFeature(featureName, child, configuration, childTrigger);
       });
-      
+
     });
-    
+
   };
 
   var userFeatures = function() {
-    
+
     console.info(" user features : ");
-    
+
     var trigger = new System.Trigger(1, function(data) {
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
       console.info("Done");
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     });
-    
+
     var configuration = {
       isOuter : true,
       featuresFolder : "features",
       renderingTransitionDuration : 400
     };
-    
+
     // TODO use messaging
     var mainFeature = window.location.hash.substring(1);
-    if(mainFeature == "") {
+    if (mainFeature == "") {
       configuration.isOuter = false;
       mainFeature = "home";
     }
-    
-    $("body").append("<feature id='" + mainFeature + "'></feature>");
-    enableFeature(mainFeature, configuration, trigger);
+
+    $("body").append("<section class='" + mainFeature + "'></section>");
+    enableFeature("", mainFeature, configuration, trigger);
   };
-  
+
   var trigger = new System.Trigger(1, function(data) {
     console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     userFeatures();
   });
-  
+
   console.info(" system features :");
-  
-  enableFeature("core", {
+
+  enableFeature("", "core", {
     featuresFolder : "system",
     renderingTransitionDuration : -1
   }, trigger);
-  
+
 });
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
