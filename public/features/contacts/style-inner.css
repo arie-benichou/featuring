@@ -1,27 +1,28 @@
 #contacts {
 	height: 100%;
-	border-left: 1px solid white;
 	background-color: rgba(0, 150, 255, 0.35);
+	border-left: 1px solid white;
 	overflow: hidden;
 	overflow: auto;
 }
 
 #contacts div.contact {
 	height: 5%;
-	min-height: 72px;
+	min-height: 64px;
 	border-bottom: 1px solid white;
 	overflow: hidden;
 }
 
 #contacts span.name {
 	color: white;
-	font-size: 70%;
+	font-size: 80%;
 }
 
 #contacts div.contact img {
+	height: 64px;
 	opacity: 0.95;
 	vertical-align: middle;
 	margin-top: 2px;
-	margin-right: 4px;
-	margin-left: 4px;
+	margin-right: 6px;
+	margin-left: 8px;
 }

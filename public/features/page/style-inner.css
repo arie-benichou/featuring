@@ -1,29 +1,40 @@
 #page {
-	background-color: rgba(0, 72, 126, 0.45);
-	overflow: hidden;
+	/*
+	background-color: rgba(244, 141, 64, 1);
+	*/
+	/*
+	background-color: white;
+	*/	
 }
 
 #page div.self {
-	
 }
 
 #page div.text {
-	margin: 24px;
+	background-color: rgba(244, 141, 64, 1);
+	padding: 22px;
+	border-bottom: 1px solid white;
 }
 
 #page div.text p {
-	font-size: 135%;
-	color: white;
-	text-align: left;
+	font-size: 190%;
+	color: rgb(44, 71, 117);
+	color: rgb(234, 221, 210);
+	text-align: center;
 	margin: 0;
-	margin-top: 22px;
-	margin-bottom: 22px;
+	padding: 0;
+	padding-top: 11px;
+	padding-bottom: 11px;
 }
 
 #gmap {
 	margin: 0;
+	/*
 	background-color: rgba(0, 72, 126, 0.72);
-	border-top: 1px solid rgb(200, 200, 200);
+	*/
+	/*
+	border-top: 2px solid rgb(200, 200, 200);
+	*/
 }
 
 /* TODO à revoir */

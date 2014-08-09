@@ -5,3 +5,14 @@
 	overflow: auto;
 	overflow-x: hidden;
 }
+
+#page {
+	/*
+	background-color: rgba(0, 72, 126, 0.45);
+	*/
+	overflow: hidden;
+}
+
+#contacts {
+	background-color: rgb(100, 130, 170);
+}
