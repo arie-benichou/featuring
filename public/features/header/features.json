@@ -1,3 +1,5 @@
 {
-  "clock" : true
+  "clock" : true,
+  "clock2" : false,
+  "clock3" : false
 }

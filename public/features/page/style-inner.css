@@ -1,13 +1,8 @@
 #page {
-	/*
-	background-color: rgba(244, 141, 64, 1);
-	*/
-	/*
-	background-color: white;
-	*/	
+	height: 100%;
 }
 
-#page div.self {
+#page>.self {
 }
 
 #page div.text {
@@ -29,15 +24,4 @@
 
 #gmap {
 	margin: 0;
-	/*
-	background-color: rgba(0, 72, 126, 0.72);
-	*/
-	/*
-	border-top: 2px solid rgb(200, 200, 200);
-	*/
-}
-
-/* TODO à revoir */
-#gmap div.self {
-	opacity: 0;
 }

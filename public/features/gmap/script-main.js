@@ -15,17 +15,19 @@ gmap.protocol.prototype = {
 };
 
 // TODO use messaging
-//$("#gmap").css({
-//  border : "1px solid red"
-//});
 setTimeout(function() {
-  $("#gmap .self").hide();
-  $("#gmap .self").css({
-    opacity : 1
+  var overlay = $("#spinner");
+  var parent = overlay.parent();
+  overlay.width(parent.width());
+  overlay.height(parent.height() / 2);
+  overlay.css({
+    "position" : "absolute",
+    "z-index" : "9999999999999",
   });
-  $("#gmap .self").fadeIn(1000, function() {
-//    $("#gmap").css({
-//      border : "none"
-//    });
-  });
-}, 1500);
+  setTimeout(function() {
+    overlay.fadeOut(1000, function() {
+      overlay.remove();
+    });
+  }, 200);
+  $(".spinner").fadeOut(400, function() {});  
+}, 2000);

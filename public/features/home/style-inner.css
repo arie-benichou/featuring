@@ -17,10 +17,6 @@
 
 #main {
 	height: 88%;
-	/*
-	border-top: 2px solid rgb(200, 200, 200);
-	*/
-	border-bottom: 2px solid rgb(200, 200, 200);
 }
 
 #footer {
@@ -31,5 +27,5 @@
 }
 
 #header,#footer {
-	background-color: rgba(214, 225, 239, 1);
+	background-color: white;
 }

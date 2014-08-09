@@ -1,14 +1,13 @@
 @import url(common.css);
 
 #home {
-	margin: 0 auto;
-	border: 1px dotted rgba(255, 255, 255, 0.5);
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
 }
 
 #home {
+	margin: 0 auto;	
 	width: 1200px;
 	height: 720px;
 	border: 3px solid rgba(255, 255, 255, 0.55);

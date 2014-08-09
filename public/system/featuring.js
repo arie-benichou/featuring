@@ -94,8 +94,14 @@ System.Featuring.prototype = {
     });
   },
   render : function(featureName, data, callback) {
+    
+    console.info("###############################################################");
+    console.info("rendering "  + featureName);
     $("head").append("<style>" + data.styles + "</style>");
+    console.log(data.html);
+    
     var $html = $(data.html);
+    
     var images = $html.find("img");
     var rewritingPathPrefix = this.path(featureName) + "assets" + "/";
     var pattern = /^\.\/assets\/(.*)/;
@@ -111,12 +117,18 @@ System.Featuring.prototype = {
       $(this).attr("alt", this.src);
       $(this).attr("src", this.notFoundImage);
     });
+    
     var featureContainer = $("#" + featureName);
+    console.debug(featureContainer);
+    
     featureContainer.replaceWith($html);
+    
     featureContainer = $("#" + featureName);
     featureContainer.hide();
     featureContainer.fadeIn(this.renderingTransitionDuration);
     setTimeout(callback, this.renderingTransitionDuration - 1);
+    console.info("###############################################################");    
+    //callback();
   },
   run : function(featureName, callback) {
     // TODO populate and pass a mutable object context
@@ -169,7 +181,7 @@ System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min
     var configuration = {
       isOuter : true,
       featuresFolder : "features",
-      renderingTransitionDuration : 450
+      renderingTransitionDuration : 400
     };
     
     // TODO use messaging
@@ -192,7 +204,7 @@ System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min
   
   enableFeature("core", {
     featuresFolder : "system",
-    renderingTransitionDuration : -2000
+    renderingTransitionDuration : -1
   }, trigger);
   
 });

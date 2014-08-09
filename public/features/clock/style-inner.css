@@ -1,11 +1,11 @@
 #clock {
 	text-align: center;
 	font-size: 135%;
+	/*
+	background-color: red;
+	*/
 }
 
-#clock .self {
-	margin: 5px;
-	padding: 5px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+#clock :first-child {
+	
 }

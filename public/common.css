@@ -10,6 +10,10 @@ body {
 	overflow: hidden;
 }
 
+p {
+	margin: 0;
+}
+
 a:link {
 	text-decoration: none;
 	color: white;
