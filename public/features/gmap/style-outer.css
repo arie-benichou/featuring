@@ -1,10 +1,6 @@
 @import url(common.css);
 
-#gmap {
-	width: 306px;
-	overflow: hidden;
-	margin: 0 auto;
-	border: 1px dotted rgba(255, 255, 255, 0.5);
+.gmap {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);

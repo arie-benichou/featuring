@@ -1,13 +1,11 @@
 @import url(common.css);
 
-#footer {
-	margin: 0 auto;
-	border: 1px dotted rgba(255, 255, 255, 0.5);
+.footer {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
 }
 
-#footer {
+.footer {
 	height: 6%;
 }

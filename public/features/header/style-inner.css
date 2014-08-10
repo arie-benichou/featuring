@@ -1,19 +1,25 @@
-.header .self img {
+.header>.self {
+	min-height: 33px;
+	height: 100%;
+	background-color: white;
+}
+
+.header img.icon {
+	float: left;
 	height: 100%;
 	opacity: 0.72;
 	vertical-align: middle;
 }
 
-.header .self .blocks {
-	float: right;
-	height: 100%;
+.header  .bar {
+	text-align: center;
+	font-size: 135%;
 }
 
-.header .self .blocks div {
-	float: right;
+.header .blocks {
 }
 
-.header  .middle div {
-	margin: 2px;
-	padding: 2px;
+.header .blocks>section {
+	float: right;
+	margin-right: 8px;
 }

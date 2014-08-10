@@ -1,18 +1,9 @@
-.main>.page {
+.main > .page {
 	width: 80%;
-	height: 100%;
 	float: left;
-	overflow-x: hidden;
-	overflow: hidden;
 }
 
-.main>.contacts {
-	overflow: hidden;
-	float: left;
+.main > .contacts {
 	width: 20%;
-	background-color: rgb(100, 130, 170);
-}
-
-.main {
-	overflow: hidden;
+	float: left;
 }

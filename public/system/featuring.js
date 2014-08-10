@@ -37,7 +37,6 @@ System.Featuring = function(data) {
   this.initialPath = data.initialPath || window.location.origin;
   this.isOuter = data.isOuter;
   this.notFoundImage = data.notFoundImage || this.path("featuring") + "assets/i404.png";
-  this.renderingTransitionDuration = data.renderingTransitionDuration || 875;
 };
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/
 System.Featuring.prototype = {
@@ -59,8 +58,7 @@ System.Featuring.prototype = {
   },
   loadFeature : function(parent, featureName, callback) {
     var prefix = this.path(featureName);
-    data = {};
-
+    var data = {};
     // TODO extract constants
     if (this.isOuter) {
       $.when($.get(prefix + "style-outer.css"), $.get(prefix + "style-inner.css"), $.get(prefix + "fragment.html"))
@@ -80,7 +78,6 @@ System.Featuring.prototype = {
         console.error("Error while loading : " + path + ".css");
       });
     }
-
   },
   loadFeatureScript : function(parent, featureName, children, callback) {
     var prefix = this.path(featureName);
@@ -95,9 +92,6 @@ System.Featuring.prototype = {
     });
   },
   render : function(parent, featureName, data, callback) {
-
-    //console.log(parent);
-
     $("head").append("<style>" + data.styles + "</style>");
     var $html = $(data.html);
     
@@ -116,11 +110,7 @@ System.Featuring.prototype = {
       $(this).attr("alt", this.src);
       $(this).attr("src", this.notFoundImage);
     });
-    
-    //var featureContainer = $((parent === "" ? "" : "." + parent) + "." + featureName);
     var featureContainer = $("." + featureName);
-    console.log($html.html());
-    //featureContainer.replaceWith("<section class='" + featureName + "'>" + ($('<div>').append($html.clone()).html()) + "</section>");
     featureContainer.append(($('<div>').append($html.clone()).html()));
     callback();
   },
@@ -139,67 +129,46 @@ System.Featuring.prototype = {
 console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
 console.info("Featuring - version 0.1.4");
 console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-
 System.loadScript("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js", function() {
-
   var enableFeature = function(parent, featureName, configuration, parentTrigger) {
-
     console.info(" . " + featureName);
-
     new System.Featuring(configuration).run(parent, featureName, function(featureName, children) {
-
       var childTrigger = new System.Trigger(children.length, function(data) {
         parentTrigger.notify(featureName);
       });
-
       configuration.isOuter = false;
-
       children.map(function(child) {
         enableFeature(featureName, child, configuration, childTrigger);
       });
-
     });
-
   };
-
   var userFeatures = function() {
-
     console.info(" user features : ");
-
     var trigger = new System.Trigger(1, function(data) {
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
       console.info("Done");
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     });
-
     var configuration = {
       isOuter : true,
-      featuresFolder : "features",
-      renderingTransitionDuration : 400
+      featuresFolder : "features"
     };
-
     // TODO use messaging
     var mainFeature = window.location.hash.substring(1);
     if (mainFeature == "") {
       configuration.isOuter = false;
       mainFeature = "home";
     }
-
     $("body").append("<section class='" + mainFeature + "'></section>");
     enableFeature("", mainFeature, configuration, trigger);
   };
-
   var trigger = new System.Trigger(1, function(data) {
     console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
     userFeatures();
   });
-
   console.info(" system features :");
-
   enableFeature("", "core", {
-    featuresFolder : "system",
-    renderingTransitionDuration : -1
+    featuresFolder : "system"
   }, trigger);
-
 });
 /*------------------------------------------------------------------8<------------------------------------------------------------------*/

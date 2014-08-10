@@ -1,13 +1,11 @@
 @import url(common.css);
 
-#header {
-	height: 6%;
-}
-
-#header {
-	margin: 0 auto;
-	border: 1px dotted rgba(255, 255, 255, 0.5);
+.header {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+.header {
+	height: 6%;
 }

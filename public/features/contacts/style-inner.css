@@ -1,7 +1,7 @@
 .contacts > .self {
 	height: 100%;
-	background-color: rgba(0, 150, 255, 0.35);
 	border-left: 1px solid white;
+	background-color: rgb(64,137,200);	
 	overflow: auto;
 }
 
@@ -9,7 +9,6 @@
 	height: 5%;
 	min-height: 64px;
 	border-bottom: 1px solid white;
-	overflow: hidden;
 }
 
 .contacts .name {
