@@ -1,9 +1,9 @@
-.main > .page {
+.main .page {
 	width: 80%;
 	float: left;
 }
 
-.main > .contacts {
+.main .contacts {
 	width: 20%;
 	float: left;
 }
