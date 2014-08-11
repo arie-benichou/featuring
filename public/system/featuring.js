@@ -35,7 +35,7 @@
   System.Featuring = function(data) {
     var data = data || {};
     this.featuresFolder = data.featuresFolder || "features";
-    this.initialPath = data.initialPath || window.location.origin;
+    this.initialPath = data.initialPath || location.origin + location.pathname;
     this.isOuter = data.isOuter;
     this.notFoundImage = data.notFoundImage || this.path("featuring") + "assets/i404.png";
   };
