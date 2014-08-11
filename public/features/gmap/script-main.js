@@ -12,7 +12,7 @@
     },
     onLoadedMap : function(data) {
       this.postMessage({
-        type : "done",
+        type : "spinner_Off",
         data : data
       });
     }

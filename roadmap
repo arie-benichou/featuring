@@ -1,4 +1,4 @@
-utiliser les messages pour le loader
+pouvoir expliciter un récepteur pour un message: "spinner:off"
 embedded worker and Blob...
 
 ! 404 router handler

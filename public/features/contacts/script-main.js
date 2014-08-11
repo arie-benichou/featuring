@@ -3,7 +3,7 @@
     onReady : function(data) {
       setTimeout(function() {
         this.postMessage({
-          type : "done",
+          type : "spinner_Off",
           data : data
         });
       }.bind(this), 250);

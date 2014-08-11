@@ -8,7 +8,7 @@
     // "height" : "30px",
     //      });
     },
-    onDone : function(data) {
+    onSpinner_Off : function(data) {
       var feature = data.feature;
       var overlay = $("." + feature + " .spinner");
       $("." + feature + " .spinning-wheel").fadeOut(400, function() {
