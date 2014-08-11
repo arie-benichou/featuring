@@ -276,6 +276,7 @@
       }
     };
     var trigger = new System.Trigger(1, function(data) {
+      render(systemContext.root.children.core);
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
       console.info("Done : ", systemContext);
       console.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
