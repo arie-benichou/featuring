@@ -12,7 +12,7 @@
       });
     },
     onShowScreenSaver : function() {
-      console.debug("Showing ScreenSaver");
+      //console.debug("Showing ScreenSaver");
       this.postMessage({
         type : "cancelScheduledScreenSaver"
       });
@@ -32,7 +32,7 @@
       }.bind(this));
     },
     onHideScreenSaver : function(screenSaverId) {
-      console.debug("Hiding ScreenSaver : ", screenSaverId);
+      //console.debug("Hiding ScreenSaver : ", screenSaverId);
       this.postMessage({
         type : "scheduleScreenSaver",
         data : this.delay
@@ -49,10 +49,10 @@
       $(".home").show();
     },
     onScheduleScreenSaver: function(delay) {
-      console.debug("Scheduling ScreenSaver : ", delay);    
+      //console.debug("Scheduling ScreenSaver : ", delay);    
     },
     onCancelScheduledScreenSaver: function(id) {
-      console.debug("Cancelling Scheduled ScreenSaver : ", id);    
+      //console.debug("Cancelling Scheduled ScreenSaver : ", id);    
     }    
   };
 }());
