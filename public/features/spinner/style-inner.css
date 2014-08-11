@@ -3,6 +3,7 @@
 	height: 100%;
 	width: 100%;
 	z-index: 9999999999999;
+	border: 1px dotted rgba(128, 128, 128, 0.5);
 }
 
 .spinner>.self {
@@ -12,10 +13,10 @@
 }
 
 .spinning-wheel {
-	width: 60px;
-	height: 60px;
+	width: 66px;
+	height: 66px;
 	box-sizing: border-box;
-	border: solid 0.75em transparent;
+	border: solid 0.66em transparent;
 	border-color: #3a9bdc #ff6060 #ffc500 #63b47a;
 	border-radius: 100%;
 	-webkit-animation: spinner 400ms linear infinite;

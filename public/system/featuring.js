@@ -118,35 +118,69 @@
     }
   };
   /*------------------------------------------------------------------8<------------------------------------------------------------------*/
-  var newWorker = function(feature) {
-    var p = feature.data.scripts.protocol;
+  var newWorker = function(context) {
+    var p = context.data.scripts.protocol;
     var obj = eval(p);
-    if (obj && typeof (obj) === "object") {
-      var worker = new Worker(feature.path + "script-worker.js");
-      worker.name = feature.name;
-      var handle = function(e) {
-        var type = e.data.type;
-        var method = "on" + type.charAt(0).toUpperCase() + type.slice(1);
-        if (method in obj) {
-          (obj[method].bind(worker))(e.data.data);
-        } else {
-          console.log("unhandled message '" + e.data.type + "' : ", e.data.data);
-        }
+    if (!obj || typeof (obj) !== "object") {
+      obj = {
+        onReady : function(data) {}
       };
-      worker.addEventListener('message', handle.bind(worker), false);
-      worker.postMessage({
-        type : "ready",
-        data : {}
-      });
-    } else {
-      // console.info("no worker protocol for " + feature.name);
     }
+    var worker = new Worker(context.path + "script-worker.js");
+    worker.context = context;
+    worker.name = context.name;
+    var handle = function(e) {
+      var type = e.data.type;
+      var data = e.data.data;
+      var method = "on" + type.charAt(0).toUpperCase() + type.slice(1);
+      if (method in obj) {
+        // if (data.way && data.way === "down") {
+        // data.way = "none";
+        // data.worker = worker.name;
+        // }
+        (obj[method].bind(worker))(e.data.data);
+      } else {
+        // console.log(worker.name + " : unhandled message '" + e.data.type + "'
+        // : ", e.data);
+        var data = e.data;
+        data.way = data.way || "up";
+        if (data.way == "up") {
+          // console.log("going up");
+          var ctx = worker.context.parent;
+          // TODO use a root worker as sentinel
+          if (ctx.worker)
+            ctx.worker.postMessage(data);
+          else {
+            // console.log("going down");
+            data.way = "down";
+          }
+        }
+        if (data.way == "down") {
+          var ctx = worker.context.parent;
+          Object.keys(worker.context.children).map(function(e) {
+            var ctx = worker.context.children[e];
+            ctx.worker.postMessage(data);
+          })
+        }
+        // if (data.way == "none") {
+        // console.log("message has been handled by " + data.worker);
+        // }
+      }
+    };
+    worker.addEventListener('message', handle.bind(worker), false);
+    worker.postMessage({
+      type : "ready",
+      data : {
+        feature : context.name
+      }
+    });
+    return worker;
   };
   /*------------------------------------------------------------------8<------------------------------------------------------------------*/
-  var assets = function(feature) {
-    var $html = $(feature.data.html);
+  var assets = function(context) {
+    var $html = $(context.data.html);
     var images = $html.find("img");
-    var rewritingPathPrefix = feature.path + "assets" + "/";
+    var rewritingPathPrefix = context.path + "assets" + "/";
     var pattern = /^\.\/assets\/(.*)/;
     images.map(function(i, e) {
       var src = $(e).attr("src");
@@ -163,18 +197,19 @@
     return $html;
   };
   /*------------------------------------------------------------------8<------------------------------------------------------------------*/
-  var _render = function(feature) {
-    var featureContainer = $("." + feature.name);
-    $("head").append("<style>" + feature.data.styles + "</style>");
-    var $html = assets(feature);
+  var _render = function(context) {
+    var featureContainer = $("." + context.name);
+    $("head").append("<style>" + context.data.styles + "</style>");
+    var $html = assets(context);
     featureContainer.append($html);
-    newWorker(feature);
   };
   /*------------------------------------------------------------------8<------------------------------------------------------------------*/
-  var render = function(feature) {
-    _render(feature);
-    Object.keys(feature.children).map(function(e) {
-      render(feature.children[e]);
+  var render = function(context) {
+    _render(context);
+    var worker = newWorker(context);
+    context.worker = worker;
+    Object.keys(context.children).map(function(e) {
+      render(context.children[e]);
     });
   };
   /*------------------------------------------------------------------8<------------------------------------------------------------------*/
@@ -183,7 +218,8 @@
     context.children[featureName] = {
       name : featureName,
       ordinal : Object.keys(context.children).length + 1,
-      children : {}
+      children : {},
+      parent : context
     };
     new System.Featuring(configuration).run(context, featureName, function(featureName, children, data, path) {
       context.children[featureName].path = path;

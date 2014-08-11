@@ -1,3 +1,4 @@
 {
-	"gmap"   : true
+	"gmap"     : true,
+  "spinner"  : true
 }
