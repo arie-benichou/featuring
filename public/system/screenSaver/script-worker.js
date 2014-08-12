@@ -12,7 +12,6 @@ self.addEventListener('message', function(e) {
     break;
   case "cancelScheduledScreenSaver":
     clearTimeout(id);
-    message.data = id;
     self.postMessage(message);
     break;
   default:
