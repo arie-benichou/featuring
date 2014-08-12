@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+
 body {
 	margin: 0 auto;
 	padding: 0;
@@ -21,25 +23,21 @@ p {
 
 a:link {
 	text-decoration: none;
-	color: white;
 	color: rgb(0, 72, 126);
 }
 
 a:visited {
 	text-decoration: none;
-	color: white;
 	color: rgb(0, 72, 126);
 }
 
 a:active {
 	text-decoration: underline;
-	color: white;
 	color: rgb(0, 72, 126);
 }
 
 a:hover {
 	text-decoration: underline;
-	color: white;
 	color: rgb(0, 72, 126);
 }
 
@@ -48,5 +46,3 @@ a:hover {
 	top: 50%;
 	transform: translateY(-50%);
 }
-
-@import url(http://fonts.googleapis.com/css?family=Ubuntu);

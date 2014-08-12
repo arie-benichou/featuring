@@ -66,19 +66,11 @@
             $.ajax({
               url : prefix + "script-main.js",
               dataType : "text"
-            })
-
-        // ,$.ajax({
-        // url : prefix + "script-worker.js",
-        // dataType : "text"
-        // })
-
-        ).then(function(rootStyles, styles, fragment, script1, script2) {
+            })).then(function(rootStyles, styles, fragment, script1, script2) {
           data.html = fragment[0];
           data.styles = rootStyles[0] + " " + styles[0];
           data.scripts = {
             protocol : script1[0],
-          // onReady : script2[0]
           };
           callback(data);
         }, function() {
@@ -88,19 +80,11 @@
         $.when($.get(prefix + "style-inner.css"), $.get(prefix + "fragment.html"), $.ajax({
           url : prefix + "script-main.js",
           dataType : "text"
-        })
-
-        // ,$.ajax({
-        // url : prefix + "script-worker.js",
-        // dataType : "text"
-        // })
-
-        ).then(function(styles, fragment, script1, script2) {
+        })).then(function(styles, fragment, script1, script2) {
           data.html = fragment[0];
           data.styles = styles[0];
           data.scripts = {
             protocol : script1[0],
-          // onReady : script2[0]
           };
           callback(data);
         }, function() {
@@ -134,24 +118,16 @@
       var data = e.data.data;
       var method = "on" + type.charAt(0).toUpperCase() + type.slice(1);
       if (method in obj) {
-        // if (data.way && data.way === "down") {
-        // data.way = "none";
-        // data.worker = worker.name;
-        // }
         (obj[method].bind(worker))(e.data.data);
       } else {
-        // console.log(worker.name + " : unhandled message '" + e.data.type + "'
-        // : ", e.data);
         var data = e.data;
         data.way = data.way || "up";
         if (data.way == "up") {
-          // console.log("going up");
           var ctx = worker.context.parent;
           // TODO use a root worker as sentinel
           if (ctx.worker)
             ctx.worker.postMessage(data);
           else {
-            // console.log("going down");
             data.way = "down";
           }
         }
@@ -162,9 +138,6 @@
             ctx.worker.postMessage(data);
           })
         }
-        // if (data.way == "none") {
-        // console.log("message has been handled by " + data.worker);
-        // }
       }
     };
     worker.addEventListener('message', handle.bind(worker), false);
