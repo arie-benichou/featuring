@@ -16,17 +16,57 @@
   return function(parameters) {
     loadScript(configuration.promiseProvider, function() {
       loadScript(configuration.contextProvider, function() {
-        console.info("Featured - version " + configuration.version);
-        promise.ajaxTimeout = configuration.timeout;
-        var section = document.createElement("section"); // TODO à revoir
-        section.setAttribute("class", parameters.name || configuration.name);
-        document.body.appendChild(section);
-        new system.core.context({
-          path : parameters.path || configuration.path,
-          name : parameters.name || configuration.name
-        }).run([ {
-          type : "start"
-        } ]);
+
+        system.core.context.defaults = {};
+
+        var getDefault = function(url, cb) {
+          var p = promise.get(url).then(function(error, data, xhr) {
+            cb(data);
+          });
+        };
+
+        var url = "./system/core/" + "assets/" + "default/" + "script-worker.js";
+        getDefault(url, function(data) {
+          system.core.context.defaults.server = data;
+
+          var url = "./system/core/" + "assets/" + "default/" + "script-main.js";
+          getDefault(url, function(data) {
+            system.core.context.defaults.client = data;
+
+            var url = "./system/core/" + "assets/" + "default/" + "features.json";
+            getDefault(url, function(data) {
+              system.core.context.defaults.features = data;
+
+              var url = "./system/core/" + "assets/" + "default/" + "fragment.html";
+              getDefault(url, function(data) {
+                system.core.context.defaults.fragment = data;
+
+                var url = "./system/core/" + "assets/" + "default/" + "style-inner.css";
+                getDefault(url, function(data) {
+                  system.core.context.defaults.inner = data;
+
+                  var url = "./system/core/" + "assets/" + "default/" + "style-outer.css";
+                  getDefault(url, function(data) {
+                    system.core.context.defaults.outer = data;
+
+                    console.info("Featured - version " + configuration.version);
+                    promise.ajaxTimeout = configuration.timeout;
+                    var section = document.createElement("section"); // TODO à revoir
+                    section.setAttribute("class", parameters.name || configuration.name);
+                    document.body.appendChild(section);
+                    new system.core.context({
+                      path : parameters.path || configuration.path,
+                      name : parameters.name || configuration.name,
+                    }).run([ {
+                      type : "start"
+                    } ]);
+
+                  });
+                });
+              });
+            });
+          });
+        });
       });
     });
   };

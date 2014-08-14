@@ -1,7 +1,9 @@
 (function() {
   return {
     onReady : function(data) {
-      //console.log("Hello from " + "'" + this.name + "'");
+      setTimeout(function() {
+        this.postMessage({type: "spinnerOff", data: this.name});
+      }.bind(this), 2000);
     }
   };
 }());

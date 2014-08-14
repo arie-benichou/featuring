@@ -5,6 +5,7 @@ system.core.context = function(object) {
 
   this.name = object.name;
   this.path = object.path;
+  
   this.data = {};
   this.children = {};
   this.parent = object.parent || null;
@@ -27,6 +28,12 @@ system.core.context = function(object) {
 system.core.context.prototype = {
 
   constructor : system.core.context,
+
+  fileDoesNotExist : function(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', url, false), xhr.send();
+    return xhr.status == 204;
+  },
 
   wave : function(message) {
     console.debug("'" + this.name + "'" + " : waving to children : " + "'" + message.type + "'");
@@ -114,26 +121,29 @@ system.core.context.prototype = {
   },
 
   run : function(messages) {
+    
     messages.push({
       type : "render"
     });
+
     var p1 = promise.get(this.path + this.name + "/" + this.clientScriptName);
     var p2 = promise.get(this.path + this.name + "/" + this.serverScriptName);
     promise.join([ p1, p2 ]).then(function(results) {
       if (results[0][0] || results[1][0]) return;
       this.data.scripts = {};
-      this.data.scripts.client = results[0][1];
-      this.data.scripts.server = results[1][1];
+      this.data.scripts.client = results[0][1] || system.core.context.defaults.client;
+      this.data.scripts.server = results[1][1] || system.core.context.defaults.server;
       this.worker = this.newWorker();
       messages.map(function(message) {
         this.worker.postMessage(message);
       }.bind(this));
     }.bind(this));
+
   },
 
   fetchChildren : function(callback) {
     promise.get(this.path + this.name + "/" + this.childrenFeaturesFileName).then(function(error, text, xhr) {
-      var childFeatureNames = JSON.parse(text);
+      var childFeatureNames = JSON.parse(text || system.core.context.defaults.features);
       var children = [];
       Object.keys(childFeatureNames).map(function(name) {
         if (childFeatureNames[name]) children.push(name);
@@ -239,8 +249,8 @@ system.core.context.prototype = {
     var p2 = promise.get(fragment);
     promise.join([ p1, p2 ]).then(function(results) {
       if (results[0][0] || results[1][0]) return;
-      this.data.styles = results[0][1];
-      this.data.html = results[1][1];
+      this.data.styles = results[0][1] || system.core.context.defaults.inner;
+      this.data.html = results[1][1] || system.core.context.defaults.fragment;
       this._render(this);
     }.bind(this));
   }

@@ -3,8 +3,7 @@
     onReady : function(data) {
     //console.log("Hello from " + "'" + this.name + "'");
     },
-    onSpinnerOff : function(data) {
-      var feature = data.feature;
+    onSpinnerOff : function(feature) {
       var overlay = document.querySelector("." + feature + " .spinner");
       document.querySelector("." + feature + " .spinning-wheel").setAttribute("style", "display:none");
       //      overlay.height(overlay.height());

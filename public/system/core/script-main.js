@@ -10,11 +10,12 @@
       section.style.opacity = 0;
       section.style.transition = "opacity 1s ease-in-out";
       document.body.appendChild(section);
-
-      new system.core.context({
+      
+      new this.context.constructor({
         path : "./features/",
         name : "home"
-      }).run([ {
+      })
+      .run([ {
         type : "start"
       } ]);
 
