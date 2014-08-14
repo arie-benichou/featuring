@@ -45,7 +45,7 @@
                 getDefault(url, function(data) {
                   system.core.context.defaults.inner = data;
 
-                  var url = "./system/core/" + "default/" + "style-outer.css";
+                  var url = "./system/core/" + "default/" + "style.outer.css";
                   getDefault(url, function(data) {
                     system.core.context.defaults.outer = data;
 
