@@ -1,19 +1,15 @@
 (function() {
-
-
-
   return {
-
     onReady : function(data) {
-      console.log("Hello from " + "'" + this.name + "'");
-      //this.context.preRender();
+      console.info(" * User Features   : OK");
+      console.info("Done");
     },
-
+    // TODO à revoir
     onOneMore : function(data) {
       this.loading = this.loading || {};
       this.loading[data] = false;
     },
-
+    // TODO à revoir
     onOneLess : function(data) {
       this.loading = this.loading || {};
       this.loading[data] = true;
@@ -28,6 +24,5 @@
         });
       }
     }
-
-  }
+  };
 }());

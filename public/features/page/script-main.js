@@ -1,8 +1,7 @@
 (function() {
   return {
     onReady : function(data) {
-      console.log("Hello from " + "'" + this.name + "'");
-
+      //console.log("Hello from " + "'" + this.name + "'");
       setTimeout(function() {
         this.postMessage({
           type : "loadedMap",
@@ -11,7 +10,6 @@
           }
         });
       }.bind(this), 3000);
-
     },
   };
 }());

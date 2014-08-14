@@ -1,14 +1,12 @@
 (function() {
   return {
-
     onReady : function(data) {
       
-      console.log("Hello from " + "'" + this.name + "'");
-      console.log("Now I'm supposed to do the same with home !");
+      console.info(" * System Features : OK");
       
-      var mainFeature = "home";
+      // TODO à revoir
       var section = document.createElement("section");
-      section.setAttribute("class", mainFeature);
+      section.setAttribute("class", "home");
       document.body.appendChild(section);
       document.body.style.display="none";
 
@@ -21,11 +19,13 @@
 
     },
 
+    // TODO à revoir
     onOneMore : function(data) {
       this.loading = this.loading || {};
       this.loading[data] = false;
     },
-
+    
+    // TODO à revoir    
     onOneLess : function(data) {
       this.loading = this.loading || {};
       this.loading[data] = true;

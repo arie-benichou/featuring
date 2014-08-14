@@ -1,7 +1,7 @@
 (function() {
   return {
     onReady : function(data) {
-      console.log("Hello from " + "'" + this.name + "'");
+      //console.log("Hello from " + "'" + this.name + "'");
     },
     onLoadedMap : function(data) {
       this.postMessage({
