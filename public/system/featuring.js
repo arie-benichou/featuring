@@ -14,7 +14,7 @@
       if (!document.head) document.body.insertAdjacentElement("beforeBegin", document.createElement("head"));
       script.src = scriptURL, document.head.appendChild(script);
     };
-    loadScript("./system/core/assets/promise.min.js", function() {
+    loadScript("./system/core/assets/dependencies/promise.min.js", function() {
       var lambdaObject = function(url, callback) {
         promise.get(url).then(function(error, data) {
           var object = eval(data);
@@ -26,9 +26,9 @@
       var go = function(data) {
         var defaults = {};
         data.map(function(e, i) {defaults[keys[i]] = e[1];});
-        lambdaObject("./system/core/assets/context.js", function(Context) {
-          Context.prototype.defaults = defaults;
+        lambdaObject("./system/core/assets/dependencies/context.js", function(Context) {
           console.info("Featured - version " + configuration.version);
+          Context.prototype.defaults = defaults;
           var section = document.createElement("section");
           section.setAttribute("class", "core");
           document.body.appendChild(section);
@@ -37,10 +37,10 @@
       };
       var keys = [ "features", "fragment", "master", "slave", "style", "style_outer" ];
       var values = [ "features.json", "fragment.html", "master.js", "slave.js", "style.css", "style.outer.css" ];
-      var files = values.map(function(fileName) {return "./system/core/default/" + fileName;});
-      var defaults = files.map(function(file) {return promise.get(file);});
+      var files = values.map(function(fileName) {return "./system/core/assets/templates/" + fileName;});
+      var templates = files.map(function(file) {return promise.get(file);});
       promise.ajaxTimeout = configuration.timeout;
-      promise.join(defaults).then(go);
+      promise.join(templates).then(go);
     });
   };
 }({

@@ -16,7 +16,7 @@
         return "on" + type.charAt(0).toUpperCase() + type.slice(1);
       };
       // TODO à revoir
-      this.notFoundImage = object.notFoundImage || "./system/core/assets/i404.png";
+      this.notFoundImage = object.notFoundImage || "./system/core/assets/images/i404.png";
     },
 
     fileDoesNotExist : function(url) {
