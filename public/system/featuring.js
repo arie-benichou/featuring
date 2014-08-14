@@ -25,27 +25,27 @@
           });
         };
 
-        var url = "./system/core/" + "assets/" + "default/" + "script-worker.js";
+        var url = "./system/core/" + "default/" + "script-worker.js";
         getDefault(url, function(data) {
           system.core.context.defaults.server = data;
 
-          var url = "./system/core/" + "assets/" + "default/" + "script-main.js";
+          var url = "./system/core/" + "default/" + "script-main.js";
           getDefault(url, function(data) {
             system.core.context.defaults.client = data;
 
-            var url = "./system/core/" + "assets/" + "default/" + "features.json";
+            var url = "./system/core/" + "default/" + "features.json";
             getDefault(url, function(data) {
               system.core.context.defaults.features = data;
 
-              var url = "./system/core/" + "assets/" + "default/" + "fragment.html";
+              var url = "./system/core/" + "default/" + "fragment.html";
               getDefault(url, function(data) {
                 system.core.context.defaults.fragment = data;
 
-                var url = "./system/core/" + "assets/" + "default/" + "style-inner.css";
+                var url = "./system/core/" + "default/" + "style.css";
                 getDefault(url, function(data) {
                   system.core.context.defaults.inner = data;
 
-                  var url = "./system/core/" + "assets/" + "default/" + "style-outer.css";
+                  var url = "./system/core/" + "default/" + "style-outer.css";
                   getDefault(url, function(data) {
                     system.core.context.defaults.outer = data;
 

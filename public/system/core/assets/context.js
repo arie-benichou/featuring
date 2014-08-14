@@ -243,7 +243,7 @@ system.core.context.prototype = {
   },
 
   render : function() {
-    var styles = this.path + this.name + "/style-inner.css";
+    var styles = this.path + this.name + "/style.css";
     var fragment = this.path + this.name + "/fragment.html";
     var p1 = promise.get(styles);
     var p2 = promise.get(fragment);
