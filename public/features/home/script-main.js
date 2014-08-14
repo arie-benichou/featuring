@@ -3,6 +3,8 @@
     onReady : function(data) {
       console.info(" * User Features   : OK");
       console.info("Done");
+      // TODO à revoir
+      document.querySelector(".home").style.display="";
     },
     // TODO à revoir
     onOneMore : function(data) {
@@ -17,7 +19,6 @@
         if (this.loading[name] === true) delete this.loading[name];
       }
       if (Object.keys(this.loading).length === 0) {
-        document.body.style.display="";
         this.postMessage({
           type : "ready",
           wave : true

@@ -7,8 +7,8 @@
       // TODO à revoir
       var section = document.createElement("section");
       section.setAttribute("class", "home");
+      section.style.display="none";
       document.body.appendChild(section);
-      document.body.style.display="none";
 
       new Context({
         path : "./features/",
