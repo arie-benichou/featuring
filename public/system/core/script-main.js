@@ -1,21 +1,22 @@
 (function() {
   return {
     onReady : function(data) {
-      
+
       console.info(" * System Features : OK");
-      
+
       // TODO à revoir
       var section = document.createElement("section");
       section.setAttribute("class", "home");
-      section.style.display="none";
+      section.style.opacity = 0;
+      section.style.transition = "opacity 1s ease-in-out";
       document.body.appendChild(section);
 
       new Context({
         path : "./features/",
         name : "home"
-      }).run([{
+      }).run([ {
         type : "start"
-      }]);
+      } ]);
 
     },
 
@@ -24,7 +25,7 @@
       this.loading = this.loading || {};
       this.loading[data] = false;
     },
-    
+
     // TODO à revoir    
     onOneLess : function(data) {
       this.loading = this.loading || {};

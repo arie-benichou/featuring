@@ -4,7 +4,7 @@
       console.info(" * User Features   : OK");
       console.info("Done");
       // TODO à revoir
-      document.querySelector(".home").style.display="";
+      document.querySelector(".home").style.opacity=1;
     },
     // TODO à revoir
     onOneMore : function(data) {
