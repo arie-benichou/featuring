@@ -1,11 +1,11 @@
 @import url(common.css);
 
-.clock {
+.date {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
 }
 
-.clock {
+.date {
 	font-size: 135%;
 }

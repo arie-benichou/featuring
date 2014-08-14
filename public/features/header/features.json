@@ -1,3 +1,4 @@
 {
-  "clock" : true
+  "date" : true,
+  "time" : true
 }

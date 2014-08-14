@@ -11,7 +11,7 @@
       section.style.transition = "opacity 1s ease-in-out";
       document.body.appendChild(section);
 
-      new Context({
+      new system.core.context({
         path : "./features/",
         name : "home"
       }).run([ {

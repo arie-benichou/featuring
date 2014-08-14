@@ -1,4 +1,7 @@
-var Context = function(object) {
+var system = system || {};
+system.core = system.core || {};
+
+system.core.context = function(object) {
 
   this.name = object.name;
   this.path = object.path;
@@ -6,6 +9,7 @@ var Context = function(object) {
   this.children = {};
   this.parent = object.parent || null;
   this.worker = null;
+
   // TODO à revoir
   this.clientScriptName = "script-main.js";
   this.serverScriptName = "script-worker.js";
@@ -15,11 +19,14 @@ var Context = function(object) {
     return "on" + type.charAt(0).toUpperCase() + type.slice(1);
   };
 
+  // TODO à revoir
+  this.notFoundImage = object.notFoundImage || "./system/core/assets/i404.png";
+
 };
 
-Context.prototype = {
+system.core.context.prototype = {
 
-  constructor : Context,
+  constructor : system.core.context,
 
   wave : function(message) {
     console.debug("'" + this.name + "'" + " : waving to children : " + "'" + message.type + "'");
@@ -47,7 +54,7 @@ Context.prototype = {
         } else {
           console.debug("'" + this.name + "'" + " : does not understand : " + "'" + message.type + "'");
           if (message.wave !== true) {
-         // TODO use a root worker as a sentinel
+            // TODO use a root worker as a sentinel
             if (this.parent)
               this.geyser(message);
             else {
@@ -170,40 +177,62 @@ Context.prototype = {
     }
   },
 
-  render : function() {
-    var assets = function(context) {
-      var template = document.createElement('template');
-      template.innerHTML = context.data.html;
-      var clone = document.importNode(template.content, true);
-      images = clone.querySelectorAll("img");
-      var rewritingPathPrefix = context.path + context.name + "/assets" + "/";
-      var pattern = /^\.\/assets\/(.*)/;
-      for ( var i = 0, n = images.length; i < n; ++i) {
-        var e = images.item(i);
-        var src = e.getAttribute("src");
-        var match = src.match(pattern);
-        if (match != null) {
-          var suffix = match[1];
-          e.setAttribute("src", rewritingPathPrefix + suffix);
-          var src = e.getAttribute("src");
-        }
+  //  imagesNotFound : function(fragment) {
+  //    var i404 = this.notFoundImage;
+  //    var f = function(e) {
+  //      var src = this.getAttribute(src);
+  //      this.setAttribute("alt", "not found : " + src);
+  //      this.setAttribute("src", i404);
+  //      var src = this.getAttribute(src);
+  //      return false;
+  //    };
+  //    var images = fragment.querySelectorAll("img");
+  //    for ( var i = 0, n = images.length; i < n; ++i) {
+  //      var image = images.item(i);
+  //      image.onerror = f;
+  //    }
+  //    return fragment;
+  //  },
+
+  assets : function(context) {
+    var template = document.createElement('template');
+    template.innerHTML = context.data.html;
+    var images = template.content.querySelectorAll("img");
+    var rewritingPathPrefix = context.path + context.name + "/assets" + "/";
+    var pattern = /^\.\/assets\/(.*)/;
+    for ( var i = 0, n = images.length; i < n; ++i) {
+      var image = images.item(i);
+      image.onerror = function() {};
+      var src = image.getAttribute("src"); // TODO use a Shadow DOM
+      var match = src.match(pattern);
+      if (match != null) {
+        var suffix = match[1];
+        image.setAttribute("src", rewritingPathPrefix + suffix);
       }
-      return clone;
+    }
+    var fragment = document.importNode(template.content, true);
+    return fragment;
+  },
+
+  _render : function(context) {
+    var featureContainer = document.querySelector("." + context.name);
+    var style = document.createElement("style");
+    style.innerHTML = context.data.styles;
+
+    // TODO à revoir
+    //var fragment = this.imagesNotFound(this.assets(context));
+    var fragment = this.assets(context);
+
+    context.template = {
+      style : style,
+      html : fragment
     };
-    var _render = function(context) {
-      //console.log("rendering " + context.name);
-      var featureContainer = document.querySelector("." + context.name);
-      var style = document.createElement("style");
-      style.innerHTML = context.data.styles;
-      var html = assets(context);
-      context.template = {
-        style : style,
-        html : html
-      };
-      // TODO ? use a shadow dom
-      document.head.appendChild(style);
-      featureContainer.appendChild(html);
-    };
+    // TODO ? use a shadow dom
+    document.head.appendChild(style);
+    featureContainer.appendChild(fragment);
+  },
+
+  render : function() {
     var styles = this.path + this.name + "/style-inner.css";
     var fragment = this.path + this.name + "/fragment.html";
     var p1 = promise.get(styles);
@@ -212,7 +241,7 @@ Context.prototype = {
       if (results[0][0] || results[1][0]) return;
       this.data.styles = results[0][1];
       this.data.html = results[1][1];
-      _render(this);
+      this._render(this);
     }.bind(this));
   }
 

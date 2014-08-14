@@ -1,6 +1,6 @@
 var updateTime = function(newTime) {
   self.postMessage({
-    type : "time",
+    type : "timeUpdate",
     data : ("0" + newTime.getHours()).slice(-2) + ":" + ("0" + newTime.getMinutes()).slice(-2)
   });
 };

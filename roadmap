@@ -1,5 +1,9 @@
+make use of Shadow Dom & Template
+
 <system></system> et <user></user>
+
 pouvoir expliciter un récepteur pour un message: "spinner:off"
+
 embedded worker and Blob...
 
 ! 404 router handler

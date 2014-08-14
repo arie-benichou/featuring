@@ -21,7 +21,7 @@
         var section = document.createElement("section"); // TODO à revoir
         section.setAttribute("class", parameters.name || configuration.name);
         document.body.appendChild(section);
-        new Context({
+        new system.core.context({
           path : parameters.path || configuration.path,
           name : parameters.name || configuration.name
         }).run([ {
