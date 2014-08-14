@@ -1,10 +1,13 @@
 (function() {
   return {
     onReady : function(data) {
-      //console.info("clock is ready !");
+      console.log("Hello from " + "'" + this.name + "'");
     },
     onTime : function(data) {
-      $(".clock .self").html(data);
+      console.log(data);
+      // TODO update state
+      // TODO render from state
+      document.querySelector(".clock .self").innerHTML = data;
     }
   };
 }());

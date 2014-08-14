@@ -7,7 +7,7 @@ var updateTime = function(newTime) {
 self.addEventListener('message', function(e) {
   self.postMessage(e.data);
   // TODO server protocol
-  if (e.data.type == "ready") {
+  if (e.data.type === "ready") {
     updateTime(new Date());
     var f = function() {
       var time = new Date();

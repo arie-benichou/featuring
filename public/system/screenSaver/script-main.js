@@ -25,9 +25,13 @@
         type : "log",
         data : "Showing ScreenSaver"
       });
+      // TODO display overlay on home
       $(".home").fadeOut(500, function() {
         $(".screenSaver").fadeIn(125, function() {
           $("body").keydown(this.hideScreenSaver);
+          $("body").css({
+            "background-color" : "black"
+          });
         }.bind(this));
       }.bind(this));
     },

@@ -1,4 +1,5 @@
 {
+  "spinner"           : true,  
   "page"              : true,
   "contacts"          : true
 }
