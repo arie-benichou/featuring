@@ -25,11 +25,11 @@
           });
         };
 
-        var url = "./system/core/" + "default/" + "script-worker.js";
+        var url = "./system/core/" + "default/" + "slave.js";
         getDefault(url, function(data) {
           system.core.context.defaults.server = data;
 
-          var url = "./system/core/" + "default/" + "script-main.js";
+          var url = "./system/core/" + "default/" + "master.js";
           getDefault(url, function(data) {
             system.core.context.defaults.client = data;
 

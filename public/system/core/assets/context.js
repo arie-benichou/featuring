@@ -12,8 +12,8 @@ system.core.context = function(object) {
   this.worker = null;
 
   // TODO à revoir
-  this.clientScriptName = "script-main.js";
-  this.serverScriptName = "script-worker.js";
+  this.clientScriptName = "master.js";
+  this.serverScriptName = "slave.js";
   this.workerIsReadyType = "ready";
   this.childrenFeaturesFileName = "features.json";
   this.workerInflector = function(type) {
