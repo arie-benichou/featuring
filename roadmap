@@ -1,11 +1,13 @@
-make use of Shadow Dom & Template
-
+======================================================================================================
+1) use new Function for lambda object
+2) attach several event listeners to slave
+3) context refactoring
+4) make use of Shadow Dom & Template
+5) ? head and tail for context
+======================================================================================================
 <system></system> et <user></user>
-
 pouvoir expliciter un récepteur pour un message: "spinner:off"
-
 embedded worker and Blob...
-
 ! 404 router handler
 
 ! check unused feature and undeclared feature

@@ -5,6 +5,7 @@ var updateTime = function(newTime) {
   });
 };
 self.addEventListener('message', function(e) {
+  // TODO tester avec plusieurs event listeners
   self.postMessage(e.data);
   if (e.data.type === "ready") {
     updateTime(new Date());

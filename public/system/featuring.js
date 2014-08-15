@@ -17,7 +17,7 @@
     loadScript("./system/core/assets/dependencies/promise.min.js", function() {
       var lambdaObject = function(url, callback) {
         promise.get(url).then(function(error, data) {
-          var object = eval(data);
+          var object = eval(data); // TODO ? use new Function() construction
           var instancer = object.constructor;
           instancer.prototype = object;
           callback(instancer);
