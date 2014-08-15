@@ -82,7 +82,7 @@
       var url = window.URL.createObjectURL(blob);
       var worker = new Worker(url);
       worker.onmessage = function(e) {
-        console.debug("received : ", "'" + e.target.name + "'", " : ", e.data);
+        console.debug("received : ", e.data, " on : ",  "'" + e.target.name + "'");
       };
       var protocol = eval(this.data.scripts.master);
 
@@ -99,11 +99,31 @@
       protocol[this.workerInflector("render")] = function() {
         this.context.render(function() {
           this.postMessage({
-            type : "ready"
+            type : "rendered"
           });
         }.bind(this));
       };
       //}
+      
+      
+      protocol[this.workerInflector("rendered")] = function() {
+        console.log(this.name + " has been rendered");
+        
+        // TODO !! (Experimental in next version)
+        // Pourvoir emballer un contexte entre : 
+        //  * une "head" : un contexte "racine virtuel"
+        //  * et une "tail" : un contexte "feuille virtuel" du dernier contexte feuille
+        // => head / concrete context / tail
+        
+        this.postMessage({
+          type : "ready"
+        });
+        
+        this.context.cascade({
+          type : "render"
+        });
+      };
+      
 
       protocol[this.workerInflector(this.name)] = function(childName) {
         if (childName != null) {
@@ -140,7 +160,7 @@
           if (Object.keys(this.loading).length === 0) {
             this.postMessage({
               type : "render",
-              wave : true
+              //wave : true
             });
           }
         };
