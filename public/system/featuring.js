@@ -29,10 +29,10 @@
         lambdaObject("./system/core/assets/dependencies/context.js", function(Context) {
           console.info("Featured - version " + configuration.version);
           Context.prototype.defaults = defaults;
-          var section = document.createElement("section");
-          section.setAttribute("class", "core");
-          document.body.appendChild(section);
-          new Context({path : "./system/", name : "core"}).run([ {type : "start"} ]);
+          var system = document.createElement("section");
+          system.setAttribute("class", "system");
+          document.body.appendChild(system);
+          new Context({path : "./system/", name : "core", isFirst: true}).run([ {type : "start"} ]);
         });
       };
       var keys = [ "features", "fragment", "master", "slave", "style", "style_outer" ];

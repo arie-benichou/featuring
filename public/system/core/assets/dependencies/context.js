@@ -3,10 +3,12 @@
     constructor : function(object) {
       this.name = object.name;
       this.path = object.path;
+      this.isFirst = object.isFirst || false;
       this.data = {};
       this.children = {};
       this.parent = object.parent || null;
       this.worker = null;
+      
       // TODO à revoir
       this.clientScriptName = "master.js";
       this.serverScriptName = "slave.js";
@@ -15,8 +17,9 @@
       this.workerInflector = function(type) {
         return "on" + type.charAt(0).toUpperCase() + type.slice(1);
       };
+      
       // TODO à revoir
-      this.notFoundImage = object.notFoundImage || "./system/core/assets/images/i404.png";
+      //this.notFoundImage = object.notFoundImage || "./system/core/assets/images/i404.png";
     },
 
     fileDoesNotExist : function(url) {
@@ -81,17 +84,24 @@
         }.bind(this));
       };
 
-      protocol[this.workerInflector("render")] = function(childName) {
-        this.context.render();
+      // TODO ! extract rendering from context
+      //if (!protocol[this.workerInflector("render")]) {
+      protocol[this.workerInflector("render")] = function() {
+        this.context.render(function() {
+          this.postMessage({
+            type : "ready"
+          });
+        }.bind(this));
       };
+      //}
 
       protocol[this.workerInflector(this.name)] = function(childName) {
         if (childName != null) {
-          //console.info("loaded '" + childName + "'");
+          console.info("loaded '" + childName + "'");
           this.loaded.push(childName);
         }
         if (this.loaded.length === this.context.childrenNames.length) {
-          //console.info("All direct children of '" + this.context.name + "' have been loaded");
+          console.info("All direct children of '" + this.context.name + "' have been loaded");
           this.context.childrenNames.map(function(name) {
             this.context.children[name].worker.postMessage({
               type : "start",
@@ -104,6 +114,28 @@
           });
         }
       };
+
+      if (this.isFirst) {
+        protocol[this.workerInflector('oneMore')] = function(data) {
+          this.loading = this.loading || {};
+          this.loading[data] = false;
+        };
+
+        protocol[this.workerInflector('oneLess')] = function(data) {
+          this.loading = this.loading || {};
+          this.loading[data] = true;
+          for ( var name in this.loading) {
+            if (this.loading[name] === true) delete this.loading[name];
+          }
+          if (Object.keys(this.loading).length === 0) {
+            this.postMessage({
+              type : "render",
+              wave : true
+            });
+          }
+        };
+      }
+
       var client = makeHandler(worker, protocol);
       worker.addEventListener("message", client.bind(worker), false);
       worker.name = this.name, worker.context = this;
@@ -111,11 +143,6 @@
     },
 
     run : function(messages) {
-
-      messages.push({
-        type : "render"
-      });
-
       var p1 = promise.get(this.path + this.name + "/" + this.clientScriptName);
       var p2 = promise.get(this.path + this.name + "/" + this.serverScriptName);
       promise.join([ p1, p2 ]).then(function(results) {
@@ -128,7 +155,6 @@
           this.worker.postMessage(message);
         }.bind(this));
       }.bind(this));
-
     },
 
     fetchChildren : function(callback) {
@@ -177,6 +203,7 @@
       }
     },
 
+    // TODO à revoir
     //  imagesNotFound : function(fragment) {
     //    var i404 = this.notFoundImage;
     //    var f = function(e) {
@@ -214,34 +241,49 @@
       return fragment;
     },
 
+    // TODO à revoir
     _render : function(context) {
-      var featureContainer = document.querySelector("." + context.name);
+      var featureContainer;
+      featureContainer = document.querySelector("." + context.name);
+      if (!featureContainer) {
+        featureContainer = document.createElement("section");
+        featureContainer.setAttribute("class", context.name);
+        document.body.appendChild(featureContainer);
+        featureContainer = document.querySelector("." + context.name);
+      }
+      // TODO use a shadow dom
+      if (context.isFirst) {
+        var style = document.createElement("style");
+        style.innerHTML = context.data.style_outer;
+        document.head.appendChild(style);
+      }
       var style = document.createElement("style");
       style.innerHTML = context.data.styles;
-
-      // TODO à revoir
-      //var fragment = this.imagesNotFound(this.assets(context));
       var fragment = this.assets(context);
-
-      context.template = {
-        style : style,
-        html : fragment
-      };
-      // TODO ? use a shadow dom
+      // TODO use a shadow dom
       document.head.appendChild(style);
+      console.log("rendering " + context.name);
       featureContainer.appendChild(fragment);
     },
 
-    render : function() {
-      var styles = this.path + this.name + "/style.css";
-      var fragment = this.path + this.name + "/fragment.html";
-      var p1 = promise.get(styles);
-      var p2 = promise.get(fragment);
-      promise.join([ p1, p2 ]).then(function(results) {
-        if (results[0][0] || results[1][0]) return;
-        this.data.styles = results[0][1] || this.defaults.style;
-        this.data.html = results[1][1] || this.defaults.fragment;
+    // TODO à revoir
+    render : function(callback) {
+      var prefix = this.path + this.name + "/";
+      var keys = [ "style_outer", "styles", "html" ];
+      var values = [ "style.outer.css", "style.css", "fragment.html" ];
+      var files = values.map(function(fileName) {
+        return prefix + fileName;
+      });
+      var promises = files.map(function(file) {
+        return promise.get(file);
+      });
+      promise.join(promises).then(function(results) {
+        if (results[0][0] || results[1][0] || results[2][0]) return;
+        this.data.style_outer = results[0][1] || this.defaults.style_outer;
+        this.data.styles = results[1][1] || this.defaults.style;
+        this.data.html = results[2][1] || this.defaults.fragment;
         this._render(this);
+        callback();
       }.bind(this));
     }
 

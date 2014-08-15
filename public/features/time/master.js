@@ -1,13 +1,21 @@
 (function() {
   return {
     onReady : function(data) {
-      //console.log("Hello from " + "'" + this.name + "'");
+    //document.querySelector("." + this.name).style.opacity = 1;
+
+    // TODO ! use a shadow dom and pass parent container
+    //      console.log(i);
+    //      console.log(j);
+    //      for(var i =0; i<10000; ++i) {
+    //        for(var j =0; j<100000; ++j) {
+    //        } 
+    //      }
+    //      console.log(i);
+    //      console.log(j);
+
     },
     onTimeUpdate : function(data) {
-      //console.log(data);
-      // TODO update state
-      // TODO render from state
       document.querySelector(".time .self").innerHTML = data;
-    }
+    },
   };
 }());
