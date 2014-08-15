@@ -36,6 +36,15 @@
         this.children[childName].worker.postMessage(message);
       }.bind(this));
     },
+    
+    cascade : function(message) {
+      console.debug("'" + this.name + "'" + " : cascading to children : " + "'" + message.type + "'");
+      message.cascade = true;
+      delete message.geyser;
+      this.childrenNames.map(function(childName) {
+        this.children[childName].worker.postMessage(message);
+      }.bind(this));
+    },
 
     geyser : function(message) {
       console.debug("'" + this.name + "'" + " : forwarding to parent : " + "'" + message.type + "'");
@@ -50,19 +59,20 @@
           var method = this.workerInflector(message.type);
           if (method in protocol) {
             (protocol[method].bind(worker))(message.data);
+            message.cascade = false;
             if (message.wave === true) this.wave(message);
           } else {
             console.debug("'" + this.name + "'" + " : does not understand : " + "'" + message.type + "'");
-            if (message.wave !== true) {
+            if (message.wave !== true && message.cascade !== true) {
               // TODO use a root worker as a sentinel
               if (this.parent)
                 this.geyser(message);
               else {
-                console.debug("'" + message.type + "'" + " was not handled by parents, waving to children...");
-                this.wave(message);
+                console.debug("'" + message.type + "'" + " was not handled by parents, cascading to children...");
+                this.cascade(message);
               }
             } else
-              this.wave(message);
+              this.cascade(message);
           }
         }.bind(this);
       }.bind(this);
