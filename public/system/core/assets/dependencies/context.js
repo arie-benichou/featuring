@@ -8,7 +8,7 @@
       this.children = {};
       this.parent = object.parent || null;
       this.worker = null;
-      
+
       // TODO à revoir
       this.clientScriptName = "master.js";
       this.serverScriptName = "slave.js";
@@ -17,7 +17,7 @@
       this.workerInflector = function(type) {
         return "on" + type.charAt(0).toUpperCase() + type.slice(1);
       };
-      
+
       // TODO à revoir
       //this.notFoundImage = object.notFoundImage || "./system/core/assets/images/i404.png";
     },
@@ -36,7 +36,7 @@
         this.children[childName].worker.postMessage(message);
       }.bind(this));
     },
-    
+
     cascade : function(message) {
       console.debug("'" + this.name + "'" + " : cascading to children : " + "'" + message.type + "'");
       message.cascade = true;
@@ -46,6 +46,7 @@
       }.bind(this));
     },
 
+    // TODO ? make it a wave up and introduce "splash" 
     geyser : function(message) {
       console.debug("'" + this.name + "'" + " : forwarding to parent : " + "'" + message.type + "'");
       message.geyser = true;
@@ -82,7 +83,7 @@
       var url = window.URL.createObjectURL(blob);
       var worker = new Worker(url);
       worker.onmessage = function(e) {
-        console.debug("received : ", e.data, " on : ",  "'" + e.target.name + "'");
+        console.debug("received : ", e.data, " on : ", "'" + e.target.name + "'");
       };
       var protocol = eval(this.data.scripts.master);
 
@@ -96,34 +97,36 @@
 
       // TODO ! extract rendering from context
       //if (!protocol[this.workerInflector("render")]) {
-      protocol[this.workerInflector("render")] = function() {
+      protocol[this.workerInflector("render")] = function(data) {
         this.context.render(function() {
           this.postMessage({
-            type : "rendered"
+            type : "rendered",
+            data: this.name
           });
         }.bind(this));
       };
       //}
-      
-      
-      protocol[this.workerInflector("rendered")] = function() {
-        console.log(this.name + " has been rendered");
+
+      protocol[this.workerInflector("rendered")] = function(data) {
+        console.log(data + " has been rendered");
         
         // TODO !! (Experimental in next version)
         // Pourvoir emballer un contexte entre : 
         //  * une "head" : un contexte "racine virtuel"
         //  * et une "tail" : un contexte "feuille virtuel" du dernier contexte feuille
         // => head / concrete context / tail
-        
+
         this.postMessage({
-          type : "ready"
+          type : "childReady",
+          data : data
         });
         
         this.context.cascade({
           type : "render"
         });
+
+
       };
-      
 
       protocol[this.workerInflector(this.name)] = function(childName) {
         if (childName != null) {
@@ -145,10 +148,12 @@
         }
       };
 
-      if (this.isFirst) {
+      if (this.isFirst === true) {
         protocol[this.workerInflector('oneMore')] = function(data) {
+          this._n = this._n || 1;
           this.loading = this.loading || {};
           this.loading[data] = false;
+          ++this._n;
         };
 
         protocol[this.workerInflector('oneLess')] = function(data) {
@@ -160,10 +165,31 @@
           if (Object.keys(this.loading).length === 0) {
             this.postMessage({
               type : "render",
-              //wave : true
+              data : this.name
+            //wave : true
             });
           }
         };
+
+        protocol[this.workerInflector('childReady')] = function(childName) {
+          this.loading = this.loading || {};
+          
+          this.rendered = this.rendered || [];
+          this.rendered.push(childName);
+          
+          console.debug(this.rendered);
+          
+          if (this._n === undefined || this.rendered.length === this._n) {
+            console.info("done");
+            setTimeout(function() {
+              this.postMessage({
+                type : "ready",
+                wave : true
+              });
+            }.bind(this), -1000 * 60);
+          }
+        };
+
       }
 
       var client = makeHandler(worker, protocol);
